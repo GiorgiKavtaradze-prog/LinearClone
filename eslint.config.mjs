@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "convex/_generated/**",
+    // Claude Code harness state (nested worktrees of parallel tracks).
+    ".claude/**",
   ]),
 ]);
 
