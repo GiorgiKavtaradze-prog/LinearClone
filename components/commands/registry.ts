@@ -53,8 +53,10 @@ const builtinCommands: AppCommand[] = [
 
 // ── Track registrations (append imports + spread below) ──────────────────
 // Example: import { boardCommands } from "@/components/board/commands";
+import { aiCommands } from "@/components/ai/commands";
 
 export const appCommands: AppCommand[] = [
   ...builtinCommands,
   // ...boardCommands,
+  ...aiCommands,
 ];

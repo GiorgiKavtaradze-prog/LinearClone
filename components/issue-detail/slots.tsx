@@ -18,9 +18,11 @@ export type IssueDetailSlotProps = {
 };
 
 // Example: import { CommentsPanel } from "@/components/issue-detail/comments-panel";
+import { AiTriagePanel } from "@/components/ai/triage-panel";
 
 export const issueDetailMainSlots: ComponentType<IssueDetailSlotProps>[] = [
   // ...CommentsPanel,
+  AiTriagePanel,
 ];
 
 export const issueDetailSidebarSlots: ComponentType<IssueDetailSlotProps>[] = [

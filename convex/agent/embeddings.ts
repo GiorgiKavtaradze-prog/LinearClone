@@ -101,9 +101,12 @@ export const ensureOrgEmbeddings = orgMutation({
       // Silent no-op — semantic features are plan-gated elsewhere.
       return null;
     }
+    // The frozen schema has no "missing embedding" index; this org-scoped
+    // existence check stops at the first match.
     const missing = await ctx.db
       .query("issues")
       .withIndex("by_org", (q) => q.eq("orgId", ctx.org._id))
+      // eslint-disable-next-line @convex-dev/no-filter-in-query
       .filter((q) => q.eq(q.field("embedding"), undefined))
       .take(1);
     if (missing.length > 0) {

@@ -536,9 +536,12 @@ export const issuesMissingEmbeddings = internalQuery({
     v.object({ issueId: v.id("issues"), text: v.string() })
   ),
   handler: async (ctx, args) => {
+    // The frozen schema has no "missing embedding" index; this org-scoped
+    // scan stops early thanks to take().
     const missing = await ctx.db
       .query("issues")
       .withIndex("by_org", (q) => q.eq("orgId", args.orgId))
+      // eslint-disable-next-line @convex-dev/no-filter-in-query
       .filter((q) => q.eq(q.field("embedding"), undefined))
       .take(args.limit);
     return missing.map((issue) => ({

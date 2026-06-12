@@ -1,8 +1,6 @@
-/** Placeholder — Track D replaces this with the AI agent chat. */
-export default function AiAgentPage() {
-  return (
-    <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
-      AI Agent — coming from Track D. Pro and Enterprise plans only.
-    </div>
-  );
+import { AiAgentPage } from "@/components/ai/ai-agent-page";
+
+/** AI agent workspace — Track D. Pro/Enterprise plans only. */
+export default function Page() {
+  return <AiAgentPage />;
 }
