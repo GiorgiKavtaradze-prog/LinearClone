@@ -220,8 +220,8 @@ flowchart TB
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/vector.git
-cd vector
+git clone https://github.com/sonnysangha/linear-clone-clerk-nextjs-16.git
+cd linear-clone-clerk-nextjs-16
 ```
 
 ### 2. Install dependencies
