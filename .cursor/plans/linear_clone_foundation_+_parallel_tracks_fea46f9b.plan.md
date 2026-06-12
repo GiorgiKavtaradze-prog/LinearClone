@@ -4,10 +4,10 @@ overview: "Build a B2B multi-tenant Linear clone (Next.js 16 + Convex + Clerk au
 todos:
   - id: foundation-deps
     content: Install all dependencies (Convex, Clerk pinned, convex-helpers, agent/rate-limiter/presence components, AI SDK, shadcn, dnd-kit, cmdk) and init git
-    status: in_progress
+    status: completed
   - id: foundation-clerk
     content: "Clerk CLI: create/link app, env pull, enable org billing, seed Pro/Enterprise plans + features, JWT template, middleware + providers"
-    status: pending
+    status: in_progress
   - id: foundation-convex
     content: "Convex: dev deployment, auth.config, complete schema.ts, convex.config.ts components, custom auth wrappers, webhook sync endpoint, plan-limit helpers, core teams/issues CRUD"
     status: pending
