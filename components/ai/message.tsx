@@ -1,7 +1,8 @@
 "use client";
 
-import { SmoothText, type UIMessage } from "@convex-dev/agent/react";
+import { useSmoothText, type UIMessage } from "@convex-dev/agent/react";
 import { getToolName, isToolUIPart } from "ai";
+import { Streamdown } from "streamdown";
 import {
   CircleAlert,
   CircleCheck,
@@ -51,6 +52,21 @@ function ToolChip({
   );
 }
 
+function AssistantText({
+  text,
+  streaming,
+}: {
+  text: string;
+  streaming: boolean;
+}) {
+  const [visibleText] = useSmoothText(text, { startStreaming: streaming });
+  return (
+    <Streamdown className="text-sm leading-relaxed [&_a]:underline [&_code]:text-xs">
+      {visibleText}
+    </Streamdown>
+  );
+}
+
 /** One chat message: user prompt bubble or assistant parts (text + tools). */
 export function AiMessage({ message }: { message: UIMessage }) {
   if (message.role === "user") {
@@ -72,15 +88,11 @@ export function AiMessage({ message }: { message: UIMessage }) {
             return null;
           }
           return (
-            <div
+            <AssistantText
               key={index}
-              className="whitespace-pre-wrap text-sm leading-relaxed"
-            >
-              <SmoothText
-                text={part.text}
-                startStreaming={message.status === "streaming"}
-              />
-            </div>
+              text={part.text}
+              streaming={message.status === "streaming"}
+            />
           );
         }
         if (isToolUIPart(part)) {
