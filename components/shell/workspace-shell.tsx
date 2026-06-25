@@ -19,13 +19,6 @@ function FullScreenLoader({ label }: { label: string }) {
   );
 }
 
-/**
- * Authenticated workspace shell.
- *
- * 1. Makes sure the Clerk active org matches the org slug in the URL.
- * 2. Waits for the Clerk → Convex webhook sync (user + org docs) before
- *    rendering, so org-scoped queries never throw during onboarding.
- */
 export function WorkspaceShell({
   orgSlug,
   children,
@@ -50,7 +43,6 @@ export function WorkspaceShell({
     if (targetMembership) {
       void setActive({ organization: targetMembership.organization.id });
     } else if (!userMemberships.isLoading && !userMemberships.hasNextPage) {
-      // The user doesn't belong to an org with this slug.
       router.replace("/onboarding");
     }
   }, [
@@ -69,8 +61,6 @@ export function WorkspaceShell({
     return <FullScreenLoader label="Loading workspace…" />;
   }
 
-  // Webhook sync still in flight — Convex queries are reactive, so this
-  // resolves by itself within a second or two of first sign-up.
   if (currentUser === null || currentOrg === null) {
     return <FullScreenLoader label="Setting up your workspace…" />;
   }
@@ -85,7 +75,6 @@ export function WorkspaceShell({
 
   return (
     <CommandProvider>
-      {/* Global upgrade prompt: catches free-plan limit errors toasted anywhere in the workspace. */}
       <PlanLimitListener />
       <div className="flex h-dvh overflow-hidden">
         <AppSidebar />

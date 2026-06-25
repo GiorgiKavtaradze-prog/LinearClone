@@ -6,12 +6,6 @@ import {
   STATUSES,
 } from "@/components/shared/issue-meta";
 
-/**
- * Track A filter model. Filters live in the board URL (shareable links) and
- * are serialized to JSON for the `views` table when saved.
- */
-
-/** Sentinel used in `assignees` to match issues with no assignee. */
 export const UNASSIGNED_FILTER = "unassigned";
 
 export type DisplayMode = "board" | "list";
@@ -21,7 +15,6 @@ export type IssueFilters = {
   priorities: IssuePriority[];
   /** User ids, or the {@link UNASSIGNED_FILTER} sentinel */
   assignees: string[];
-  /** Label ids */
   labels: string[];
 };
 
@@ -53,7 +46,6 @@ function sanitizeStringArray(value: unknown): string[] {
   ];
 }
 
-/** Coerce untrusted input (URL params, stored JSON) into a valid filter set. */
 export function sanitizeFilters(input: unknown): IssueFilters {
   const raw = (input ?? {}) as Record<string, unknown>;
   return {
@@ -83,7 +75,6 @@ export function displayFromSearchParams(params: ParamsLike): DisplayMode {
   return params.get("view") === "list" ? "list" : "board";
 }
 
-/** Query string (no leading "?") encoding filters + display mode. */
 export function toQueryString(
   filters: IssueFilters,
   display: DisplayMode
@@ -151,8 +142,6 @@ export function issueMatchesFilters(
   }
   return true;
 }
-
-// ── Saved view (de)serialization for the `views` table ────────────────────
 
 export type SavedViewPayload = {
   v: 1;

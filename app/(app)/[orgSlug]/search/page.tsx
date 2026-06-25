@@ -34,11 +34,6 @@ function useDebouncedValue<T>(value: T, delayMs: number): T {
   return debounced;
 }
 
-/**
- * Workspace-wide full-text issue search (Track A), backed by the
- * search_title / search_description indexes. Reachable via the "/" shortcut
- * and the command palette.
- */
 export default function SearchPage() {
   const params = useParams<{ orgSlug: string }>();
   const [query, setQuery] = useState("");

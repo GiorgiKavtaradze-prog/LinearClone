@@ -20,8 +20,6 @@ export function Providers({ children }: { children: ReactNode }) {
     >
       <ClerkProvider appearance={{ theme: shadcn }}>
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-          {/* Radix tooltips require a root provider; the ui/tooltip primitive
-              does not self-wrap, so every bare <Tooltip> depends on this. */}
           <TooltipProvider>{children}</TooltipProvider>
         </ConvexProviderWithClerk>
       </ClerkProvider>

@@ -6,10 +6,7 @@ import { IssueRow } from "@/components/issues/issue-row";
 import { STATUSES } from "@/components/shared/issue-meta";
 import { StatusIcon } from "@/components/shared/status-icon";
 
-/**
- * List display for the board route: issues grouped by status, pre-filtered
- * by the caller. Mirrors the foundation team page's density.
- */
+
 export function FilteredIssueList({
   issues,
   teamKey,

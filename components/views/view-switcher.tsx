@@ -34,7 +34,6 @@ import {
   toQueryString,
 } from "./filters";
 
-/** Order-insensitive payload fingerprint to highlight the active view. */
 function fingerprint(payload: SavedViewPayload): string {
   return JSON.stringify({
     teamId: payload.teamId,
@@ -46,11 +45,7 @@ function fingerprint(payload: SavedViewPayload): string {
   });
 }
 
-/**
- * Saved views: apply a view (navigates to its team board with filters),
- * save the current filters as a new view (private or shared), and delete
- * views you created.
- */
+
 export function ViewSwitcher({
   orgSlug,
   teamId,

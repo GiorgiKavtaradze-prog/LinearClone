@@ -21,7 +21,6 @@ import {
 import { ProjectProperties } from "@/components/projects/project-properties";
 import { IssueProgressBar } from "@/components/projects/progress-bar";
 
-/** Project detail — Track B. Progress, issues across teams, and properties. */
 export default function ProjectDetailPage() {
   const params = useParams<{ orgSlug: string; projectId: string }>();
   const projectId = params.projectId as Id<"projects">;
@@ -43,7 +42,6 @@ export default function ProjectDetailPage() {
     );
   }
 
-  // Keying by project id resets editor state when navigating between projects.
   return (
     <ProjectDetail
       key={project._id}

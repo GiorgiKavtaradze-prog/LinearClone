@@ -75,10 +75,6 @@ function FilterMenu({
   );
 }
 
-/**
- * Linear-style filter toolbar: multi-select status / priority / assignee /
- * label filters, with a clear button when anything is active.
- */
 export function FilterBar({
   filters,
   onFiltersChange,

@@ -7,10 +7,6 @@ import { CurrentPlanCard } from "@/components/billing/current-plan-card";
 import { UpgradeOptions } from "@/components/billing/upgrade-options";
 import { UsageCard } from "@/components/billing/usage-card";
 
-/**
- * Org billing settings: current-plan summary with Clerk's subscription
- * drawer, live usage against free-tier limits, and upgrade paths.
- */
 export default function BillingSettingsPage() {
   const org = useQuery(api.organizations.current);
 

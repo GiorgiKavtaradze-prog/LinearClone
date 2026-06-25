@@ -10,7 +10,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CreateProjectDialog } from "@/components/projects/create-project-dialog";
 import { ProjectRow } from "@/components/projects/project-row";
 
-/** Projects index — Track B. Org-level projects with progress at a glance. */
 export default function ProjectsPage() {
   return (
     <Suspense
@@ -30,8 +29,6 @@ function ProjectsPageInner() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  // The command palette deep-links here with ?new=true to open the dialog,
-  // so the URL param is treated as a second "open" source of truth.
   const wantNew = searchParams.get("new") === "true";
   const [manualOpen, setManualOpen] = useState(false);
   const createOpen = manualOpen || wantNew;

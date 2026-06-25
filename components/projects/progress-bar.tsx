@@ -1,10 +1,6 @@
 import { cn } from "@/lib/utils";
 import { completionPercent, IssueProgress } from "./project-meta";
 
-/**
- * Segmented issue-progress bar: done (emerald) → in review (blue) →
- * in progress (yellow) over a muted track. Canceled issues are excluded.
- */
 export function IssueProgressBar({
   progress,
   className,

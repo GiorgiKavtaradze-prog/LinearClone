@@ -16,7 +16,6 @@ export function projectStatusLabel(status: ProjectStatus): string {
   return PROJECT_STATUSES.find((s) => s.value === status)?.label ?? status;
 }
 
-/** Linear-ish project color palette. */
 export const PROJECT_COLORS = [
   "#5e6ad2",
   "#26b5ce",
@@ -30,7 +29,6 @@ export const PROJECT_COLORS = [
 
 export const DEFAULT_PROJECT_COLOR = PROJECT_COLORS[0];
 
-/** Issue counts by status — matches `progressShape` in convex/projects.ts. */
 export type IssueProgress = {
   total: number;
   backlog: number;
@@ -62,7 +60,6 @@ export function progressFromIssues(
   return progress;
 }
 
-/** Percent complete = done / (total − canceled). */
 export function completionPercent(progress: IssueProgress): number {
   const denominator = progress.total - progress.canceled;
   if (denominator <= 0) {

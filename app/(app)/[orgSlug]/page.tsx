@@ -9,10 +9,7 @@ import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Loader2, Sparkles } from "lucide-react";
 
-/**
- * Workspace home — redirects to the first team's issues, or shows the
- * empty state nudging team creation (the sidebar has the create button).
- */
+
 export default function WorkspaceHomePage() {
   const params = useParams<{ orgSlug: string }>();
   const router = useRouter();
@@ -36,7 +33,6 @@ export default function WorkspaceHomePage() {
       toast.success(
         `Demo workspace ready — ${result.teams} teams, ${result.issues} issues, ${result.projects} projects.`
       );
-      // Keep the spinner on; the reactive teams query redirects to the first team.
     } catch (error) {
       setSeeding(false);
       toast.error(

@@ -6,10 +6,7 @@ import { IssueRow } from "@/components/issues/issue-row";
 import { STATUSES } from "@/components/shared/issue-meta";
 import { StatusIcon } from "@/components/shared/status-icon";
 
-/**
- * Issues grouped into status sections, Linear-list style. Shared by the
- * project and cycle detail pages (Track B).
- */
+
 export function GroupedIssueList({
   issues,
   teamKeyFor,

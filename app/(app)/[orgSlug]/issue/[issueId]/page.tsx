@@ -17,10 +17,7 @@ import {
   issueDetailSidebarSlots,
 } from "@/components/issue-detail/slots";
 
-/**
- * Issue detail — foundation skeleton with extension slots. Track C fills in
- * comments/activity/attachments/relations; Track D adds AI triage panels.
- */
+
 export default function IssueDetailPage() {
   const params = useParams<{ orgSlug: string; issueId: string }>();
   const issueId = params.issueId as Id<"issues">;
@@ -46,8 +43,6 @@ export default function IssueDetailPage() {
     );
   }
 
-  // Keying by issue id resets the editor's local state when navigating
-  // between issues without effects fighting live updates.
   return (
     <IssueDetail
       key={issue._id}

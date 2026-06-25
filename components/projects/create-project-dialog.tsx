@@ -166,7 +166,7 @@ export function CreateProjectDialog({
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
                 aria-label="Target date"
-                className="bg-transparent text-xs text-foreground outline-none [color-scheme:light] dark:[color-scheme:dark]"
+                className="bg-transparent text-xs text-foreground outline-none scheme-light dark:scheme-dark"
               />
             </div>
           </div>

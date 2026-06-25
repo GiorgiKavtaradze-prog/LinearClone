@@ -32,10 +32,6 @@ function PropertyRow({
   );
 }
 
-/**
- * Issue-detail sidebar slot (Track B): assign the issue to a project and a
- * cycle via the existing `issues.update` mutation.
- */
 export function IssueProjectCyclePanel({ issue, team }: IssueDetailSlotProps) {
   const projects = useQuery(api.projects.list);
   const cycles = useQuery(api.cycles.listByTeam, { teamId: team._id });
