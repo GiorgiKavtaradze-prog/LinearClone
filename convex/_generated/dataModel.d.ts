@@ -17,9 +17,6 @@ import type {
 import type { GenericId } from "convex/values";
 import schema from "../schema.js";
 
-/**
- * The names of all of your Convex tables.
- */
 export type TableNames = TableNamesInDataModel<DataModel>;
 
 /**
@@ -48,13 +45,4 @@ export type Doc<TableName extends TableNames> = DocumentByName<
 export type Id<TableName extends TableNames | SystemTableNames> =
   GenericId<TableName>;
 
-/**
- * A type describing your Convex data model.
- *
- * This type includes information about what tables you have, the type of
- * documents stored in those tables, and the indexes defined on them.
- *
- * This type is used to parameterize methods like `queryGeneric` and
- * `mutationGeneric` to make them type-safe.
- */
 export type DataModel = DataModelFromSchemaDefinition<typeof schema>;
