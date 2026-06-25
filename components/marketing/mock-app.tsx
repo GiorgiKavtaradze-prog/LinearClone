@@ -20,15 +20,11 @@ import { HERO_ISSUE_GROUPS, type MockIssue } from "@/components/marketing/mock-d
 import { MockFrame, MockWindowBar } from "@/components/marketing/mock-window";
 import { cn } from "@/lib/utils";
 
-/**
- * The hero product mock: a full Vector workspace window (sidebar + grouped
- * issue list) built from the same primitives the real app uses.
- */
 export function MockApp({ className }: { className?: string }) {
   return (
     <MockFrame className={className}>
       <MockWindowBar title="vector.app/acme/team/eng" />
-      <div className="flex h-[26rem] text-[13px]">
+      <div className="flex h-104 text-[13px]">
         <MockSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <div className="flex h-10 shrink-0 items-center gap-2 border-b px-4">

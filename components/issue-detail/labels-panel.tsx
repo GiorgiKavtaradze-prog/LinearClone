@@ -24,7 +24,6 @@ import { IssueDetailSlotProps } from "@/components/issue-detail/slots";
 import { LabelChip } from "@/components/shared/label-chip";
 import { cn } from "@/lib/utils";
 
-/** Linear's default label palette. */
 const LABEL_COLORS = [
   "#5e6ad2",
   "#26b5ce",

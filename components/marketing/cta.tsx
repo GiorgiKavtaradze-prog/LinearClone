@@ -11,7 +11,7 @@ export function Cta() {
       />
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px)] bg-[size:56px_100%] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_100%,black,transparent)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px)] bg-size-[56px_100%] mask-[radial-gradient(ellipse_60%_70%_at_50%_100%,black,transparent)]"
       />
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-24 text-center md:py-32">
         <h2 className="max-w-2xl text-4xl font-semibold tracking-tighter text-balance md:text-5xl">

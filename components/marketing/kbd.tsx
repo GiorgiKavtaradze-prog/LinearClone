@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 
-/** Keycap chip used across the marketing page for shortcut hints. */
 export function Kbd({
   children,
   className,

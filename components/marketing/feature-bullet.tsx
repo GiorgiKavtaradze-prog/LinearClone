@@ -1,6 +1,5 @@
 import type { LucideIcon } from "lucide-react";
 
-/** Icon + title + description bullet used in the feature sections. */
 export function FeatureBullet({
   icon: Icon,
   title,

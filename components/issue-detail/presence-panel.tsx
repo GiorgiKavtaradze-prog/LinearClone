@@ -14,7 +14,6 @@ import { UserAvatar } from "@/components/shared/user-avatar";
 
 const MAX_FACES = 5;
 
-/** Live "who's viewing this issue" facepile, backed by @convex-dev/presence. */
 export function PresencePanel({ issue }: IssueDetailSlotProps) {
   const currentUser = useQuery(api.users.current);
   if (!currentUser) {

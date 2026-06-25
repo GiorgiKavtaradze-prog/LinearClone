@@ -11,7 +11,6 @@ import {
 import { Kbd } from "@/components/marketing/kbd";
 import { cn } from "@/lib/utils";
 
-/** Command palette (⌘K) mock for the keyboard-first section. */
 export function MockCommandPalette({ className }: { className?: string }) {
   return (
     <div

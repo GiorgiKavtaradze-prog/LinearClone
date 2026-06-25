@@ -54,7 +54,6 @@ export function CreateIssueDialog({
   const [priority, setPriority] = useState<IssuePriority>("none");
   const [submitting, setSubmitting] = useState(false);
 
-  // Fall back to the default/first team without needing an effect.
   const teamId = selectedTeamId ?? defaultTeamId ?? teams?.[0]?._id;
 
   const handleSubmit = async () => {

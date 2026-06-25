@@ -6,7 +6,6 @@ import { Section, SectionHeading } from "@/components/marketing/section";
 export function FeaturesAi() {
   return (
     <Section id="ai" className="overflow-hidden">
-      {/* A single restrained glow distinguishes the AI section. */}
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 -z-10 h-full bg-[radial-gradient(ellipse_50%_40%_at_70%_20%,color-mix(in_oklch,var(--foreground),transparent_95%),transparent)]"

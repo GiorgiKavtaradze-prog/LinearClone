@@ -1,6 +1,3 @@
-/** Formatting helpers shared by the issue-detail collaboration panels. */
-
-/** Compact relative timestamp, e.g. "just now", "5m", "3h", "4d", "Mar 5". */
 export function formatRelativeTime(timestamp: number): string {
   const deltaMs = Date.now() - timestamp;
   const seconds = Math.floor(deltaMs / 1000);
@@ -28,7 +25,6 @@ export function formatRelativeTime(timestamp: number): string {
   });
 }
 
-/** Human-friendly file size, e.g. "824 B", "2.4 KB", "12.1 MB". */
 export function formatFileSize(bytes: number): string {
   if (bytes < 1024) {
     return `${bytes} B`;

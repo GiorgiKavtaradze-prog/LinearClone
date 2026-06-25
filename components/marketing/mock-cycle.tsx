@@ -2,10 +2,6 @@ import { RefreshCcw } from "lucide-react";
 import { CYCLE_BARS } from "@/components/marketing/mock-data";
 import { cn } from "@/lib/utils";
 
-/**
- * Compact cycle progress card: header, progress bar, scope stats, and a
- * tiny burnup chart drawn with plain divs.
- */
 export function MockCycle({ className }: { className?: string }) {
   const scope = 38;
   const completed = CYCLE_BARS[CYCLE_BARS.length - 1];

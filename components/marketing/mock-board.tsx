@@ -5,7 +5,6 @@ import { BOARD_COLUMNS, type MockIssue } from "@/components/marketing/mock-data"
 import { MockFrame, MockWindowBar } from "@/components/marketing/mock-window";
 import { cn } from "@/lib/utils";
 
-/** Kanban board mock for the Board & Cycles section. */
 export function MockBoard({ className }: { className?: string }) {
   return (
     <MockFrame className={className}>
@@ -16,7 +15,6 @@ export function MockBoard({ className }: { className?: string }) {
             key={column.label}
             className={cn(
               "space-y-2",
-              // Keep the mock compact on small screens: two columns only.
               columnIndex >= 2 && "hidden lg:block"
             )}
           >
@@ -31,7 +29,6 @@ export function MockBoard({ className }: { className?: string }) {
               <MockBoardCard
                 key={issue.id}
                 issue={issue}
-                // The "dragging" card sells the dnd interaction.
                 dragging={columnIndex === 1 && issueIndex === 0}
               />
             ))}

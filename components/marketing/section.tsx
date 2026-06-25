@@ -1,9 +1,5 @@
 import { cn } from "@/lib/utils";
 
-/**
- * Shared marketing section scaffolding: consistent container width,
- * vertical rhythm, and the eyebrow/title/lede heading pattern.
- */
 export function Section({
   id,
   className,

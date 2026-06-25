@@ -3,11 +3,6 @@ import type {
   IssueStatus,
 } from "@/components/shared/issue-meta";
 
-/**
- * Static sample data for the marketing product mocks. Kept in one place so
- * the mocks stay consistent (same people, labels, and issue identifiers
- * across the hero, board, cycle, and AI sections).
- */
 
 export type MockLabel = { name: string; color: string };
 
@@ -38,7 +33,6 @@ export const MOCK_PEOPLE = {
   sam: "Sam Rivera",
 } as const;
 
-/** Grouped list shown inside the hero app window. */
 export const HERO_ISSUE_GROUPS: {
   status: IssueStatus;
   label: string;
@@ -108,7 +102,6 @@ export const HERO_ISSUE_GROUPS: {
   },
 ];
 
-/** Kanban columns for the board mock. */
 export const BOARD_COLUMNS: {
   status: IssueStatus;
   label: string;
@@ -196,5 +189,4 @@ export const BOARD_COLUMNS: {
   },
 ];
 
-/** Per-day completed counts for the cycle mini chart (14-day cycle). */
 export const CYCLE_BARS = [1, 2, 2, 4, 5, 5, 8, 10, 13, 15, 18, 21, 24, 26];

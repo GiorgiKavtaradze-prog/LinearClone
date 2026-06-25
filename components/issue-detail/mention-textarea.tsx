@@ -10,13 +10,6 @@ import { cn } from "@/lib/utils";
 
 export type MentionUser = { userId: Id<"users">; name: string };
 
-/**
- * Plain textarea with `@mention` autocomplete over the org's members.
- *
- * The parent owns the text value and a map of users that have been mentioned;
- * on submit it should keep only the mentions whose `@Name` token still
- * appears in the text (see `resolveMentions`).
- */
 export function MentionTextarea({
   value,
   onChange,
@@ -29,9 +22,7 @@ export function MentionTextarea({
 }: {
   value: string;
   onChange: (value: string) => void;
-  /** Called when a member is picked from the autocomplete. */
   onMention: (user: MentionUser) => void;
-  /** Called on Cmd/Ctrl+Enter. */
   onSubmit?: () => void;
   placeholder?: string;
   autoFocus?: boolean;
@@ -58,7 +49,6 @@ export function MentionTextarea({
       : [];
   const open = mentionStart !== null && suggestions.length > 0;
 
-  /** Re-derive the active "@query" fragment from the caret position. */
   const syncMentionContext = (text: string, caret: number) => {
     const before = text.slice(0, caret);
     const match = /(?:^|\s)@([\w-]{0,30})$/.exec(before);
@@ -111,7 +101,6 @@ export function MentionTextarea({
           syncMentionContext(value, e.currentTarget.selectionStart ?? 0)
         }
         onBlur={() => {
-          // Delay so clicking a suggestion (mousedown) wins over blur.
           setTimeout(() => setMentionStart(null), 150);
         }}
         onKeyDown={(e) => {
@@ -179,7 +168,6 @@ export function MentionTextarea({
   );
 }
 
-/** Keep only the tracked mentions whose `@Name` token survived editing. */
 export function resolveMentions(
   body: string,
   tracked: Map<Id<"users">, string>

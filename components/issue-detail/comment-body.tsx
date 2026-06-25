@@ -6,10 +6,6 @@ import { escapeRegExp } from "@/components/issue-detail/format";
 
 type MentionedUser = { userId: Id<"users">; name: string };
 
-/**
- * Renders a plain-text comment body with `@Name` tokens highlighted for
- * everyone recorded in the comment's mentions.
- */
 export function CommentBody({
   body,
   mentionedUsers,
@@ -21,7 +17,6 @@ export function CommentBody({
     if (mentionedUsers.length === 0) {
       return [{ text: body, mention: false }];
     }
-    // Longest names first so "@Jo Smith" wins over "@Jo".
     const names = [...new Set(mentionedUsers.map((user) => user.name))]
       .sort((a, b) => b.length - a.length)
       .map(escapeRegExp);

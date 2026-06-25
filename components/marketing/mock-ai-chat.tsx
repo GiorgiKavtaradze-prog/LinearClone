@@ -4,10 +4,6 @@ import { UserAvatar } from "@/components/shared/user-avatar";
 import { MOCK_PEOPLE } from "@/components/marketing/mock-data";
 import { MockFrame, MockWindowBar } from "@/components/marketing/mock-window";
 
-/**
- * AI agent chat mock: a question, the agent's tool calls, a cycle summary,
- * and an issue the agent filed — mirroring the real /ai experience.
- */
 export function MockAiChat({ className }: { className?: string }) {
   return (
     <MockFrame className={className}>
