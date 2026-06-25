@@ -84,25 +84,6 @@ Want to build apps like this from scratch? Learn how to **code with AI the right
 - 🤖 **AI-Powered Development** — Learn to code with AI the right way: plan, parallelize, review, and ship with Cursor instead of blindly accepting output
 - 🎨 **Modern UI** — shadcn/ui, Tailwind CSS v4, dark mode, and keyboard-first UX patterns
 
-### The PAPAFAM Community
-
-- 💬 Join thousands of developers building together
-- 🏆 Real results from graduates who landed jobs and launched products
-- 📦 Full course materials, starter code, and lifetime access
-
-### What's Included
-
-- Step-by-step video walkthroughs of real-world builds
-- Private community access
-- Code reviews and Q&A support
-- Regular new project drops
-
-👉 **[Join the PAPAFAM and start building →](https://www.papareact.com/course)**
-
----
-
-## ✨ Features
-
 ### Issues & Boards
 
 - 📝 **Full issue tracking** — Statuses (Backlog → Todo → In Progress → In Review → Done / Canceled), five priority levels, assignees, estimates, due dates, and color-coded labels
