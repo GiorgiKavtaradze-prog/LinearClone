@@ -1,20 +1,10 @@
-/**
- * Single source of truth for Clerk billing plan data (Track E).
- *
- * Plan ids/slugs live here and ONLY here — never inline them in components.
- * `convex/lib/limits.ts` is the authoritative enforcement of free-tier caps;
- * the numbers here mirror it for display purposes.
- */
-
-/** Convex `organizations.plan` values (synced from Clerk via webhooks). */
 export type OrgPlan = "free" | "pro" | "enterprise";
 
-/** Clerk plan slugs, usable with `has({ plan: <slug> })`. */
+
 export type PlanSlug = "free_org" | "pro" | "enterprise";
 
 export type BillingPeriod = "month" | "annual";
 
-/** Clerk feature slugs attached to plans, usable with `has({ feature: <slug> })`. */
 export const PLAN_FEATURES = {
   aiAgent: "ai_agent",
   unlimitedProjects: "unlimited_projects",
@@ -27,7 +17,6 @@ export const PLAN_FEATURES = {
 export type PlanFeatureSlug =
   (typeof PLAN_FEATURES)[keyof typeof PLAN_FEATURES];
 
-/** Display mirror of `FREE_PLAN_LIMITS` in convex/lib/limits.ts. */
 export const FREE_PLAN_DISPLAY_LIMITS = {
   seats: 3,
   projects: 2,
@@ -35,27 +24,18 @@ export const FREE_PLAN_DISPLAY_LIMITS = {
 } as const;
 
 export type PlanDefinition = {
-  /** Convex `organizations.plan` value this plan maps to. */
+
   plan: OrgPlan;
-  /** Clerk plan slug (for `has({ plan })`). */
   slug: PlanSlug;
-  /** Clerk plan id (for `<CheckoutButton planId>` / `<PlanDetailsButton planId>`). */
   clerkPlanId: string;
   name: string;
   tagline: string;
-  /** USD per month when billed monthly. */
   monthlyPrice: number;
-  /** USD per month equivalent when billed annually. */
   annualMonthlyPrice: number;
-  /** Extra pricing detail shown under the price (e.g. seat pricing). */
   priceNote?: string;
-  /** Seat cap, or null for unlimited. */
   maxSeats: number | null;
-  /** Marketing bullet list for the plan card. */
   highlights: string[];
-  /** Lead-in line above the highlights, e.g. "Everything in Free, plus:". */
   highlightsLeadIn?: string;
-  /** Whether to visually emphasize this plan on the pricing page. */
   popular?: boolean;
 };
 
@@ -126,7 +106,6 @@ const PLANS_BY_ORG_PLAN: Record<OrgPlan, PlanDefinition> = {
   enterprise: ENTERPRISE_PLAN,
 };
 
-/** Resolve the plan definition for a Convex `organizations.plan` value. */
 export function planForOrg(plan: OrgPlan): PlanDefinition {
   return PLANS_BY_ORG_PLAN[plan];
 }
@@ -142,13 +121,11 @@ export function formatPrice(amount: number): string {
   return `$${amount}`;
 }
 
-// ── Feature comparison table (pricing page) ────────────────────────────────
 
 export type ComparisonValue = string | boolean;
 
 export type ComparisonRow = {
   label: string;
-  /** Values in PLANS order: [Free, Pro, Enterprise]. */
   values: [ComparisonValue, ComparisonValue, ComparisonValue];
 };
 
