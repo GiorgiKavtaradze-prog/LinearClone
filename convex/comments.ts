@@ -5,7 +5,6 @@ import { getOrgIssue } from "./issues";
 import { logActivity } from "./lib/activity";
 import { orgMutation, orgQuery } from "./lib/customFunctions";
 
-/** Comment enriched with author + mention display info for the feed. */
 const enrichedCommentValidator = v.object({
   _id: v.id("comments"),
   _creationTime: v.number(),
@@ -15,13 +14,11 @@ const enrichedCommentValidator = v.object({
   mentions: v.array(v.id("users")),
   authorName: v.string(),
   authorImageUrl: v.optional(v.string()),
-  /** Resolved names for everyone @mentioned, for highlight rendering. */
   mentionedUsers: v.array(
     v.object({ userId: v.id("users"), name: v.string() })
   ),
 });
 
-/** Verify a comment belongs to the caller's org before any read/write. */
 async function getOrgComment(
   ctx: { db: QueryCtx["db"] },
   orgId: Id<"organizations">,
@@ -34,7 +31,6 @@ async function getOrgComment(
   return comment;
 }
 
-/** Keep only mentioned users that are actually members of the org. */
 async function filterToOrgMembers(
   ctx: { db: QueryCtx["db"] },
   orgId: Id<"organizations">,

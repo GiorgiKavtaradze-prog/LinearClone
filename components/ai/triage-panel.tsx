@@ -33,10 +33,6 @@ type Suggestion = {
   reasoning: string;
 };
 
-/**
- * AI triage slot on the issue detail page (Pro/Enterprise): semantic
- * duplicate detection + priority/label suggestions with one-click apply.
- */
 export function AiTriagePanel(props: IssueDetailSlotProps) {
   const { isLoaded, hasAccess } = useAiAccess();
   if (!isLoaded || !hasAccess) {
@@ -60,8 +56,6 @@ function TriagePanelInner({ issue }: IssueDetailSlotProps) {
   const [suggestionError, setSuggestionError] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
 
-  // Auto-run duplicate detection once per issue view; also nudge the org
-  // embedding backfill so older issues are searchable.
   const checkedIssueId = useRef<Id<"issues"> | null>(null);
   useEffect(() => {
     if (checkedIssueId.current === issue._id) {
@@ -163,7 +157,6 @@ function TriagePanelInner({ issue }: IssueDetailSlotProps) {
         </Button>
       </div>
 
-      {/* Duplicates */}
       <div className="flex flex-col gap-1.5">
         <p className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
           <CopyX className="size-3" />
@@ -205,7 +198,6 @@ function TriagePanelInner({ issue }: IssueDetailSlotProps) {
         )}
       </div>
 
-      {/* Suggestions */}
       {(suggestion || suggestionError) && (
         <>
           <Separator />

@@ -6,10 +6,7 @@ import {
 import { mutation, query } from "../_generated/server";
 import { getAuthContext, getCurrentUser } from "./auth";
 
-/**
- * Org-agnostic authenticated functions — use when no active org is required
- * (e.g. user profile, onboarding).
- */
+
 export const authedQuery = customQuery(
   query,
   customCtx(async (ctx) => {
@@ -26,12 +23,6 @@ export const authedMutation = customMutation(
   })
 );
 
-/**
- * Org-scoped functions — THE default for all workspace data. Resolves the
- * active org from the JWT, verifies membership, and exposes
- * `ctx.user`, `ctx.org`, `ctx.membership`. Always filter queries by
- * `ctx.org._id`.
- */
 export const orgQuery = customQuery(
   query,
   customCtx(async (ctx) => {

@@ -3,11 +3,6 @@ import { Doc, Id } from "./_generated/dataModel";
 import { getOrgIssue } from "./issues";
 import { orgQuery } from "./lib/customFunctions";
 
-/**
- * Activity feed queries. Entries are written by `logActivity` in
- * `convex/lib/activity.ts` from every issue-changing mutation; this module
- * only renders them.
- */
 const activityEntryValidator = v.object({
   _id: v.id("activity"),
   _creationTime: v.number(),
@@ -40,10 +35,6 @@ export const listByIssue = orgQuery({
       return userCache.get(userId) ?? null;
     };
 
-    /**
-     * Assignee changes store raw user ids — resolve them to display names so
-     * the client never sees opaque ids.
-     */
     const resolveValue = async (
       field: string | undefined,
       value: string | undefined

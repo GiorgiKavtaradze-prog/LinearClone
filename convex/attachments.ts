@@ -3,7 +3,6 @@ import { getOrgIssue } from "./issues";
 import { logActivity } from "./lib/activity";
 import { orgMutation, orgQuery } from "./lib/customFunctions";
 
-/** Server-side cap; the upload UI also enforces this before uploading. */
 export const MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024;
 
 const attachmentValidator = v.object({
@@ -15,11 +14,9 @@ const attachmentValidator = v.object({
   fileSize: v.number(),
   uploadedBy: v.id("users"),
   uploaderName: v.string(),
-  /** Short-lived download URL from Convex storage (null if file is gone). */
   url: v.union(v.string(), v.null()),
 });
 
-/** Step 1 of an upload: mint a short-lived URL the client POSTs the file to. */
 export const generateUploadUrl = orgMutation({
   args: {},
   returns: v.string(),
@@ -28,7 +25,6 @@ export const generateUploadUrl = orgMutation({
   },
 });
 
-/** Step 2 of an upload: link the stored file to an issue. */
 export const create = orgMutation({
   args: {
     issueId: v.id("issues"),

@@ -7,7 +7,6 @@ import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { AiMessage } from "./message";
 
-/** Streaming message list for one thread (delta-synced over the websocket). */
 export function AiConversation({ threadId }: { threadId: string }) {
   const { results, status, loadMore } = useUIMessages(
     api.agent.chat.listMessages,
@@ -19,8 +18,7 @@ export function AiConversation({ threadId }: { threadId: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const pinnedToBottom = useRef(true);
 
-  // Track whether the user has scrolled away from the bottom; only then do
-  // we stop following the stream.
+
   const onScroll = () => {
     const el = containerRef.current;
     if (!el) return;
@@ -28,7 +26,6 @@ export function AiConversation({ threadId }: { threadId: string }) {
       el.scrollHeight - el.scrollTop - el.clientHeight < 80;
   };
 
-  // Follow new content (message count + streamed characters).
   const streamLength = messages.reduce(
     (total, message) => total + message.text.length,
     0

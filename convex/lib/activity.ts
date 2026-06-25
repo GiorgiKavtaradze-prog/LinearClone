@@ -11,10 +11,6 @@ type ActivityEntry = {
   newValue?: string;
 };
 
-/**
- * Append an event to an issue's activity feed. All mutations that change
- * issues should call this so the feed (Track C) stays complete.
- */
 export async function logActivity(
   ctx: MutationCtx,
   entry: ActivityEntry

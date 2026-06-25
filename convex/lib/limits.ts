@@ -1,10 +1,7 @@
 import { Doc } from "../_generated/dataModel";
 import { MutationCtx } from "../_generated/server";
 
-/**
- * Free-tier caps. Pro/Enterprise are unlimited app-side; Clerk enforces
- * paid seat limits at invite time.
- */
+
 export const FREE_PLAN_LIMITS = {
   seats: 3,
   projects: 2,

@@ -174,7 +174,6 @@ export function ActivitySection({ issue }: IssueDetailSlotProps) {
     }));
     if (filter === "all") {
       for (const entry of activity ?? []) {
-        // Comments render themselves — skip their "commented" log entries.
         if (entry.type === "commented") {
           continue;
         }

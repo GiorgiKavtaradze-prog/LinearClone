@@ -17,7 +17,6 @@ export const cycleShape = {
   endDate: v.number(),
 };
 
-/** Verify a cycle belongs to the caller's org before any read/write. */
 async function getOrgCycle(
   ctx: { db: QueryCtx["db"] },
   orgId: Id<"organizations">,
@@ -30,7 +29,6 @@ async function getOrgCycle(
   return cycle;
 }
 
-/** Verify a team belongs to the caller's org. */
 async function getOrgTeam(
   ctx: { db: QueryCtx["db"] },
   orgId: Id<"organizations">,

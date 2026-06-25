@@ -55,8 +55,6 @@ function AiWorkspace() {
     });
   });
 
-  // Kick the semantic-index backfill once per visit (idempotent no-op when
-  // every issue already has an embedding).
   const backfillRequested = useRef(false);
   useEffect(() => {
     if (!backfillRequested.current) {

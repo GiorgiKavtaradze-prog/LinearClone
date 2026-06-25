@@ -4,10 +4,6 @@ import { Id } from "../_generated/dataModel";
 import { chatModel } from "./models";
 import { vectorTools } from "./tools";
 
-/**
- * Custom fields our authenticated entry points inject into the action ctx so
- * every tool runs with a server-resolved org + user (see tools.ts).
- */
 export type VectorAgentCtx = {
   orgId: Id<"organizations">;
   requestUserId: Id<"users">;
@@ -32,7 +28,6 @@ export const vectorAgent = new Agent<VectorAgentCtx>(components.agent, {
   tools: vectorTools,
   stopWhen: stepCountIs(12),
   contextOptions: {
-    // Recent thread history only — issue knowledge comes from tools.
     recentMessages: 30,
     searchOtherThreads: false,
   },

@@ -6,18 +6,6 @@ import { DataModel, Id } from "../_generated/dataModel";
 import { issueSummaryValidator } from "./data";
 import { embedText } from "./embeddings";
 
-/**
- * Org-scoped tools for the Vector agent.
- *
- * SECURITY: every tool reads `orgId` / `requestUserId` from the custom action
- * context that our own internal action injects after authenticating the
- * caller. The model can never choose which org it operates on — tool inputs
- * only carry user-meaningful identifiers (team keys, issue numbers, emails)
- * that are resolved inside the caller's org.
- *
- * NOTE: `execute` return types are annotated explicitly to avoid a type cycle
- * through `internal` → `_generated/api` → this module.
- */
 export type VectorToolCtx = ToolCtx<DataModel> & {
   orgId: Id<"organizations">;
   requestUserId: Id<"users">;

@@ -17,7 +17,6 @@ export function CommentComposer({ issueId }: { issueId: Id<"issues"> }) {
   const createComment = useMutation(api.comments.create);
   const [value, setValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  // Users picked from the autocomplete; narrowed to surviving tokens on submit.
   const trackedMentions = useRef(new Map<Id<"users">, string>());
 
   const submit = async () => {

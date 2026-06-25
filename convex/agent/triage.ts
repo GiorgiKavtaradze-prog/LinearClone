@@ -12,15 +12,6 @@ import {
   isAiConfigured,
 } from "./models";
 
-/**
- * Triage assist for the issue detail page (Track D).
- *
- * These are public actions, so they authenticate + plan-gate through
- * `internal.agent.data.authorizeAi` (JWT-derived org, never client input)
- * before touching any data, and return `{ ok: false }` results instead of
- * throwing for expected failures so the UI can degrade gracefully.
- */
-
 const PRIORITIES = ["none", "urgent", "high", "medium", "low"] as const;
 type SuggestedPriority = (typeof PRIORITIES)[number];
 
@@ -41,7 +32,6 @@ type TriageSuggestionResult =
       reasoning: string;
     };
 
-/** Semantic duplicate detection over the `by_embedding` vector index. */
 export const findDuplicates = action({
   args: { issueId: v.id("issues") },
   returns: v.union(
@@ -110,7 +100,6 @@ export const findDuplicates = action({
   },
 });
 
-/** Suggest a priority + labels for an issue from its title/description. */
 export const suggestTriage = action({
   args: { issueId: v.id("issues") },
   returns: v.union(

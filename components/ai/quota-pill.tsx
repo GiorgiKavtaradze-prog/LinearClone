@@ -10,7 +10,6 @@ export type AiQuota = {
   resetsAt: number | null;
 };
 
-/** Compact daily-quota indicator for Pro orgs (Enterprise is unlimited). */
 export function QuotaPill({ quota }: { quota: AiQuota | undefined }) {
   if (!quota || !quota.hasAccess || quota.unlimited) {
     return null;

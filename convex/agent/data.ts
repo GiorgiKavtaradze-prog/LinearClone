@@ -25,7 +25,6 @@ import {
  * and re-verifies that every loaded document belongs to that org.
  */
 
-// ── Shared shapes ──────────────────────────────────────────────────────────
 
 export const issueSummaryValidator = v.object({
   issueId: v.id("issues"),
@@ -116,8 +115,6 @@ function issueText(issue: { title: string; description?: string }): string {
     : issue.title;
 }
 
-// ── Authorization ──────────────────────────────────────────────────────────
-
 /**
  * Resolve + gate the caller for AI actions. Uses the JWT-backed auth context
  * (never client input) and enforces the plan gate server-side.
@@ -169,7 +166,6 @@ export const actorContext = internalQuery({
   },
 });
 
-// ── Workspace lookups (read-only tools) ────────────────────────────────────
 
 export const listTeamsForOrg = internalQuery({
   args: { orgId: v.id("organizations") },
@@ -317,8 +313,6 @@ export const issueSummariesByIds = internalQuery({
     return summaries;
   },
 });
-
-// ── Issue writes (agent tools) ─────────────────────────────────────────────
 
 export const createIssueForAgent = internalMutation({
   args: {
@@ -513,8 +507,6 @@ export const updateIssueForAgent = internalMutation({
   },
 });
 
-// ── Embeddings support ─────────────────────────────────────────────────────
-
 export const issueEmbeddingSource = internalQuery({
   args: { issueId: v.id("issues") },
   returns: v.union(
@@ -575,8 +567,6 @@ export const saveIssueEmbeddings = internalMutation({
   },
 });
 
-// ── Triage assist ──────────────────────────────────────────────────────────
-
 export const issueTriageContext = internalQuery({
   args: { orgId: v.id("organizations"), issueId: v.id("issues") },
   returns: v.object({
@@ -627,8 +617,6 @@ export const issueTriageContext = internalQuery({
     };
   },
 });
-
-// ── Reports ────────────────────────────────────────────────────────────────
 
 export const cycleSummaryForTeam = internalQuery({
   args: { orgId: v.id("organizations"), teamKey: v.string() },

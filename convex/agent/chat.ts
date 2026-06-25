@@ -61,8 +61,6 @@ async function getOwnedThread(
   return thread;
 }
 
-// ── Threads ────────────────────────────────────────────────────────────────
-
 export const createThread = orgMutation({
   args: {},
   returns: v.string(),
@@ -116,7 +114,6 @@ export const deleteThread = orgMutation({
   },
 });
 
-// ── Messages ───────────────────────────────────────────────────────────────
 
 export const listMessages = orgQuery({
   args: {
@@ -168,7 +165,6 @@ export const sendMessage = orgMutation({
       args.threadId
     );
 
-    // Pro: 50 messages/user/day. Enterprise: unlimited.
     if (ctx.org.plan === "pro") {
       const status = await aiRateLimiter.limit(ctx, "aiMessagesDaily", {
         key: aiMessageKey(ctx.org._id, ctx.user._id),
@@ -256,8 +252,6 @@ export const streamResponse = internalAction({
     return null;
   },
 });
-
-// ── Quota ──────────────────────────────────────────────────────────────────
 
 export const quota = orgQuery({
   args: {},

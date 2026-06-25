@@ -96,7 +96,6 @@ export function AiMessage({ message }: { message: UIMessage }) {
           );
         }
         if (isToolUIPart(part)) {
-          // Covers both static (`tool-*`) and dynamic tool parts.
           return (
             <ToolChip
               key={index}

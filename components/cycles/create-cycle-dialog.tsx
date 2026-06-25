@@ -132,7 +132,7 @@ export function CreateCycleDialog({
                 value={start}
                 onChange={(e) => setStart(e.target.value)}
                 aria-label="Start date"
-                className="h-8 rounded-md border bg-transparent px-2 text-xs text-foreground outline-none [color-scheme:light] dark:[color-scheme:dark]"
+                className="h-8 rounded-md border bg-transparent px-2 text-xs text-foreground outline-none scheme-light dark:scheme-dark"
               />
             </div>
             <div className="flex flex-col gap-1.5">
@@ -142,7 +142,7 @@ export function CreateCycleDialog({
                 value={end}
                 onChange={(e) => setEnd(e.target.value)}
                 aria-label="End date"
-                className="h-8 rounded-md border bg-transparent px-2 text-xs text-foreground outline-none [color-scheme:light] dark:[color-scheme:dark]"
+                className="h-8 rounded-md border bg-transparent px-2 text-xs text-foreground outline-none scheme-light dark:scheme-dark"
               />
             </div>
           </div>

@@ -1,7 +1,6 @@
 import { Doc } from "../_generated/dataModel";
 import { MutationCtx, QueryCtx } from "../_generated/server";
 
-/** Custom claims we add via the Clerk "convex" JWT template. */
 type OrgClaims = {
   org_id?: string;
   org_slug?: string;
@@ -14,10 +13,6 @@ export type AuthContext = {
   membership: Doc<"members">;
 };
 
-/**
- * Resolve the signed-in user from the Clerk JWT. Returns null while the
- * Clerk → Convex webhook sync hasn't landed yet (caller decides how to wait).
- */
 export async function getCurrentUserOrNull(
   ctx: QueryCtx | MutationCtx
 ): Promise<Doc<"users"> | null> {
