@@ -6,13 +6,6 @@ import { orgQuery } from "./lib/customFunctions";
 const RESULTS_PER_INDEX = 20;
 const MAX_RESULTS = 25;
 
-/**
- * Full-text search over issues using the `search_title` and
- * `search_description` indexes. Title matches rank ahead of
- * description-only matches; results are deduplicated and enriched with the
- * owning team so the UI can render identifiers (ENG-42) without extra
- * round trips.
- */
 export const issues = orgQuery({
   args: {
     query: v.string(),
@@ -60,8 +53,7 @@ export const issues = orgQuery({
           : q.search("description", text).eq("orgId", ctx.org._id)
       )
       .take(RESULTS_PER_INDEX);
-
-    // Dedupe, keeping title matches (better relevance signal) first.
+      
     const seen = new Set<Id<"issues">>();
     const merged: Doc<"issues">[] = [];
     for (const issue of [...titleMatches, ...descriptionMatches]) {

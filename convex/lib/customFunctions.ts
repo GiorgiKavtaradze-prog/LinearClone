@@ -37,7 +37,6 @@ export const orgMutation = customMutation(
   })
 );
 
-/** Org-scoped mutation restricted to org admins. */
 export const orgAdminMutation = customMutation(
   mutation,
   customCtx(async (ctx) => {

@@ -41,11 +41,6 @@ function assertAiAccess(org: Doc<"organizations">): void {
   }
 }
 
-/**
- * Verify the agent-component thread belongs to the authenticated
- * (org, user) pair before any read/write. Thread ownership is keyed by
- * `threadUserKey`, so cross-org access is impossible.
- */
 async function getOwnedThread(
   ctx: QueryCtx | MutationCtx,
   orgId: Id<"organizations">,
@@ -186,7 +181,6 @@ export const sendMessage = orgMutation({
       prompt,
     });
 
-    // First message names the conversation.
     if (!thread.title || thread.title === DEFAULT_THREAD_TITLE) {
       await updateThreadMetadata(ctx, components.agent, {
         threadId: args.threadId,
@@ -204,11 +198,6 @@ export const sendMessage = orgMutation({
   },
 });
 
-/**
- * Generate the assistant's reply asynchronously, streaming deltas over the
- * websocket. Tools receive the server-resolved org/user via the custom ctx
- * fields — never from model output.
- */
 export const streamResponse = internalAction({
   args: {
     threadId: v.string(),
@@ -238,7 +227,6 @@ export const streamResponse = internalAction({
       );
     } catch (error) {
       console.error("AI response generation failed", error);
-      // Fail gracefully: leave a visible assistant message in the thread.
       const reason = isAiConfigured()
         ? "Something went wrong while generating a response. Please try again."
         : AI_NOT_CONFIGURED_MESSAGE;

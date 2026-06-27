@@ -2,14 +2,6 @@ import { v } from "convex/values";
 import { Doc } from "./_generated/dataModel";
 import { internalMutation, MutationCtx } from "./_generated/server";
 
-/**
- * Clerk → Convex sync. Clerk is the source of truth for users, orgs,
- * memberships, and subscriptions; these handlers mirror them into Convex
- * tables so queries can join against them with indexes.
- *
- * Clerk billing uses dot-notation event names (subscription.updated,
- * subscriptionItem.canceled) — never Stripe-style names.
- */
 
 type ClerkUserData = {
   id: string;
@@ -175,9 +167,6 @@ async function deleteOrganization(ctx: MutationCtx, data: ClerkOrgData) {
   for (const membership of memberships) {
     await ctx.db.delete(membership._id);
   }
-  // Workspace data (teams/issues/...) is intentionally left for a future
-  // cleanup job — orgs are rarely deleted and cascading here would make
-  // webhook handling slow.
   await ctx.db.delete(org._id);
 }
 
@@ -198,10 +187,6 @@ async function upsertMembership(ctx: MutationCtx, data: ClerkMembershipData) {
     .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkUserId))
     .unique();
   if (!org || !user) {
-    // Clerk fires organization.created and organizationMembership.created
-    // near-simultaneously and Svix does not guarantee ordering. Throwing makes
-    // the webhook return non-2xx so Svix retries; returning success here would
-    // ACK the event and lose the membership forever.
     throw new Error(
       `Membership sync: org or user not synced yet (${clerkOrgId}, ${clerkUserId}) — failing so Svix retries`
     );
@@ -267,13 +252,11 @@ async function syncSubscription(
   }
   const org = await getOrgByClerkId(ctx, clerkOrgId);
   if (!org) {
-    // Same out-of-order delivery race as memberships: fail so Svix retries.
     throw new Error(
       `Subscription sync: org not synced yet (${clerkOrgId}) — failing so Svix retries`
     );
   }
 
-  // Highest active paid plan wins; fall back to free.
   let plan: Doc<"organizations">["plan"] = "free";
   for (const item of data.items ?? []) {
     const itemPlan = planFromSlug(item.plan?.slug);
@@ -303,7 +286,6 @@ async function syncSubscriptionItem(
   }
   const org = await getOrgByClerkId(ctx, clerkOrgId);
   if (!org) {
-    // Same out-of-order delivery race as memberships: fail so Svix retries.
     throw new Error(
       `Subscription item sync: org not synced yet (${clerkOrgId}) — failing so Svix retries`
     );

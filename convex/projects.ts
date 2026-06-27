@@ -19,7 +19,6 @@ export const projectShape = {
   color: v.optional(v.string()),
 };
 
-/** Issue counts by status — the project progress primitive. */
 export const progressShape = v.object({
   total: v.number(),
   backlog: v.number(),
@@ -30,7 +29,6 @@ export const progressShape = v.object({
   canceled: v.number(),
 });
 
-/** Verify a project belongs to the caller's org before any read/write. */
 async function getOrgProject(
   ctx: { db: QueryCtx["db"] },
   orgId: Id<"organizations">,
@@ -71,7 +69,6 @@ async function countProgress(
   return progress;
 }
 
-/** Lightweight project list for pickers (no progress computation). */
 export const list = orgQuery({
   args: {},
   returns: v.array(v.object(projectShape)),
@@ -83,7 +80,6 @@ export const list = orgQuery({
   },
 });
 
-/** Projects with issue counts by status — powers the projects index page. */
 export const listWithProgress = orgQuery({
   args: {},
   returns: v.array(v.object({ ...projectShape, progress: progressShape })),
@@ -113,7 +109,6 @@ export const get = orgQuery({
   },
 });
 
-/** All issues assigned to a project (project detail page computes progress from this). */
 export const listIssues = orgQuery({
   args: { projectId: v.id("projects") },
   returns: v.array(v.object(issueShape)),
@@ -127,11 +122,6 @@ export const listIssues = orgQuery({
   },
 });
 
-/**
- * Recent org issues NOT already in the given project — candidates for the
- * "add issues to project" picker. Assignment itself goes through
- * `issues.update` (projectId arg).
- */
 export const candidateIssues = orgQuery({
   args: { projectId: v.id("projects") },
   returns: v.array(v.object(issueShape)),
@@ -245,7 +235,6 @@ export const update = orgMutation({
   },
 });
 
-/** Delete a project and detach its issues (issues themselves are kept). */
 export const remove = orgMutation({
   args: { projectId: v.id("projects") },
   returns: v.null(),

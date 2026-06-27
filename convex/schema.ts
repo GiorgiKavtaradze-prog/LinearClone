@@ -1,10 +1,6 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
-/**
- * Shared validators — import these from feature code instead of redefining.
- * The schema is FROZEN for parallel track work: coordinate before editing this file.
- */
 export const issueStatusValidator = v.union(
   v.literal("backlog"),
   v.literal("todo"),
@@ -50,7 +46,6 @@ export const issueRelationTypeValidator = v.union(
 );
 
 export default defineSchema({
-  // ── Synced from Clerk via webhooks ─────────────────────────────────────
   users: defineTable({
     clerkId: v.string(),
     name: v.string(),
@@ -80,14 +75,11 @@ export default defineSchema({
     .index("by_org_and_user", ["orgId", "userId"])
     .index("by_clerk_membership_id", ["clerkMembershipId"]),
 
-  // ── Workspace structure ────────────────────────────────────────────────
   teams: defineTable({
     orgId: v.id("organizations"),
     name: v.string(),
-    /** Issue prefix, e.g. "ENG" → ENG-123 */
     key: v.string(),
     description: v.optional(v.string()),
-    /** Per-team issue number sequence */
     nextIssueNumber: v.number(),
   })
     .index("by_org", ["orgId"])
@@ -96,7 +88,6 @@ export default defineSchema({
   issues: defineTable({
     orgId: v.id("organizations"),
     teamId: v.id("teams"),
-    /** Per-team sequence number, displayed as KEY-number */
     number: v.number(),
     title: v.string(),
     description: v.optional(v.string()),
@@ -108,11 +99,8 @@ export default defineSchema({
     cycleId: v.optional(v.id("cycles")),
     parentIssueId: v.optional(v.id("issues")),
     estimate: v.optional(v.number()),
-    /** Due date as ms since epoch */
     dueDate: v.optional(v.number()),
-    /** Fractional ranking for board/list ordering */
     sortOrder: v.number(),
-    /** Embedding for semantic duplicate detection (Track D fills this) */
     embedding: v.optional(v.array(v.float64())),
   })
     .index("by_org", ["orgId"])
@@ -140,7 +128,6 @@ export default defineSchema({
   labels: defineTable({
     orgId: v.id("organizations"),
     name: v.string(),
-    /** Hex color, e.g. "#5e6ad2" */
     color: v.string(),
   }).index("by_org", ["orgId"]),
 
@@ -172,7 +159,6 @@ export default defineSchema({
     orgId: v.id("organizations"),
     issueId: v.id("issues"),
     actorId: v.id("users"),
-    /** e.g. "created" | "status_changed" | "assigned" | "labeled" | "commented" */
     type: v.string(),
     field: v.optional(v.string()),
     oldValue: v.optional(v.string()),
@@ -187,7 +173,6 @@ export default defineSchema({
     description: v.optional(v.string()),
     status: projectStatusValidator,
     leadId: v.optional(v.id("users")),
-    /** Target date as ms since epoch */
     targetDate: v.optional(v.number()),
     color: v.optional(v.string()),
   }).index("by_org", ["orgId"]),
@@ -195,7 +180,6 @@ export default defineSchema({
   cycles: defineTable({
     orgId: v.id("organizations"),
     teamId: v.id("teams"),
-    /** Per-team cycle sequence: Cycle 1, Cycle 2, ... */
     number: v.number(),
     name: v.optional(v.string()),
     startDate: v.number(),
@@ -218,7 +202,6 @@ export default defineSchema({
     orgId: v.id("organizations"),
     creatorId: v.id("users"),
     name: v.string(),
-    /** JSON-serialized filter configuration (owned by Track A) */
     filters: v.string(),
     shared: v.boolean(),
   })

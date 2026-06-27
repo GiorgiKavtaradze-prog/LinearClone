@@ -27,7 +27,6 @@ export const issueShape = {
   embedding: v.optional(v.array(v.float64())),
 };
 
-/** Verify an issue belongs to the caller's org before any read/write. */
 export async function getOrgIssue(
   ctx: { db: QueryCtx["db"] },
   orgId: Id<"organizations">,
@@ -68,7 +67,6 @@ export const get = orgQuery({
   },
 });
 
-/** Look up an issue by its display identifier (team key + number, e.g. ENG-42). */
 export const getByNumber = orgQuery({
   args: { teamId: v.id("teams"), number: v.number() },
   returns: v.union(v.object(issueShape), v.null()),
@@ -108,11 +106,9 @@ export const create = orgMutation({
     }
     await assertCanCreateIssue(ctx, ctx.org);
 
-    // Claim the next per-team issue number (ENG-1, ENG-2, ...).
     const number = team.nextIssueNumber;
     await ctx.db.patch(team._id, { nextIssueNumber: number + 1 });
 
-    // New issues sort to the top of their column.
     const newest = await ctx.db
       .query("issues")
       .withIndex("by_team", (q) => q.eq("teamId", args.teamId))

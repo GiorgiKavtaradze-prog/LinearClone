@@ -7,14 +7,12 @@ const viewShape = {
   orgId: v.id("organizations"),
   creatorId: v.id("users"),
   name: v.string(),
-  /** JSON-serialized filter configuration (see components/views/filters.ts) */
   filters: v.string(),
   shared: v.boolean(),
 };
 
 const MAX_FILTERS_LENGTH = 4096;
 
-/** Reject payloads that aren't valid JSON before they hit the table. */
 function assertValidFilters(filters: string): void {
   if (filters.length > MAX_FILTERS_LENGTH) {
     throw new Error("View filters are too large");
@@ -26,10 +24,6 @@ function assertValidFilters(filters: string): void {
   }
 }
 
-/**
- * Saved views visible to the caller: every shared view in the org plus the
- * caller's own private views.
- */
 export const list = orgQuery({
   args: {},
   returns: v.array(v.object(viewShape)),
@@ -120,10 +114,6 @@ export const remove = orgMutation({
   },
 });
 
-/**
- * Label assignments for every issue in a team — one round trip powering both
- * label chips on board cards and client-side label filtering.
- */
 export const teamIssueLabels = orgQuery({
   args: { teamId: v.id("teams") },
   returns: v.array(

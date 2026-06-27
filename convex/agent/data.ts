@@ -17,15 +17,6 @@ import {
   planValidator,
 } from "../schema";
 
-/**
- * Internal data layer for the AI agent (Track D).
- *
- * Every function takes an explicit, server-supplied `orgId` (resolved from the
- * authenticated context by the public entry points — NEVER from model output)
- * and re-verifies that every loaded document belongs to that org.
- */
-
-
 export const issueSummaryValidator = v.object({
   issueId: v.id("issues"),
   identifier: v.string(),
@@ -115,10 +106,6 @@ function issueText(issue: { title: string; description?: string }): string {
     : issue.title;
 }
 
-/**
- * Resolve + gate the caller for AI actions. Uses the JWT-backed auth context
- * (never client input) and enforces the plan gate server-side.
- */
 export const authorizeAi = internalQuery({
   args: {},
   returns: v.object({
@@ -145,10 +132,6 @@ export const authorizeAi = internalQuery({
   },
 });
 
-/**
- * Context for scheduled actions (no auth identity propagates through the
- * scheduler). Only callable internally with ids our own mutations produced.
- */
 export const actorContext = internalQuery({
   args: { orgId: v.id("organizations"), userId: v.id("users") },
   returns: v.object({
@@ -303,8 +286,6 @@ export const issueSummariesByIds = internalQuery({
     const summaries = [];
     for (const issueId of args.issueIds) {
       const issue = await ctx.db.get(issueId);
-      // Silently skip anything outside the caller's org (defense in depth —
-      // vector search is already filtered by orgId).
       if (!issue || issue.orgId !== args.orgId) {
         continue;
       }
@@ -353,7 +334,6 @@ export const createIssueForAgent = internalMutation({
       ? await resolveMemberByEmail(ctx, args.orgId, args.assigneeEmail)
       : undefined;
 
-    // Claim the next per-team issue number (mirrors issues.create).
     const number = team.nextIssueNumber;
     await ctx.db.patch(team._id, { nextIssueNumber: number + 1 });
 
@@ -384,7 +364,6 @@ export const createIssueForAgent = internalMutation({
       type: "created",
     });
 
-    // Fill the semantic-search embedding asynchronously.
     await ctx.scheduler.runAfter(0, internal.agent.embeddings.embedIssue, {
       issueId,
     });
@@ -403,7 +382,6 @@ export const updateIssueForAgent = internalMutation({
     description: v.optional(v.string()),
     status: v.optional(issueStatusValidator),
     priority: v.optional(issuePriorityValidator),
-    /** Email of the member to assign, or null to unassign. */
     assigneeEmail: v.optional(v.union(v.string(), v.null())),
   },
   returns: v.object({
@@ -528,8 +506,6 @@ export const issuesMissingEmbeddings = internalQuery({
     v.object({ issueId: v.id("issues"), text: v.string() })
   ),
   handler: async (ctx, args) => {
-    // The frozen schema has no "missing embedding" index; this org-scoped
-    // scan stops early thanks to take().
     const missing = await ctx.db
       .query("issues")
       .withIndex("by_org", (q) => q.eq("orgId", args.orgId))
@@ -557,8 +533,6 @@ export const saveIssueEmbeddings = internalMutation({
   handler: async (ctx, args) => {
     for (const item of args.items) {
       const issue = await ctx.db.get(item.issueId);
-      // Embeddings are internal search metadata, not a user-visible edit, so
-      // this intentionally does not write to the activity feed.
       if (issue && issue.orgId === args.orgId) {
         await ctx.db.patch(item.issueId, { embedding: item.embedding });
       }
@@ -743,8 +717,6 @@ export const standupForOrg = internalQuery({
 
     const inTeam = (issue: Doc<"issues">) =>
       teamId === undefined || issue.teamId === teamId;
-
-    // Recent activity → completed / created issue ids per actor.
     const recentActivity = (
       await ctx.db
         .query("activity")

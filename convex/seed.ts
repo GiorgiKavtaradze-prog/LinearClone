@@ -3,16 +3,6 @@ import { Doc, Id } from "./_generated/dataModel";
 import { logActivity } from "./lib/activity";
 import { orgAdminMutation } from "./lib/customFunctions";
 
-/**
- * One-click demo workspace. Populates teams, labels, projects, cycles and a
- * few dozen issues (with sub-issues, relations, comments and activity) so a
- * fresh org shows the app in full flight.
- *
- * Sized to stay inside FREE_PLAN_LIMITS by construction (2 projects = the
- * free cap, 46 issues < 100), so it never trips the limit helpers and the
- * remaining headroom still lets users create their own data.
- */
-
 const DAY = 24 * 60 * 60 * 1000;
 
 type IssueStatus = Doc<"issues">["status"];
@@ -24,11 +14,8 @@ type IssueSpec = {
   status: IssueStatus;
   priority: IssuePriority;
   estimate?: number;
-  /** Due date relative to now; negative = overdue. */
   dueInDays?: number;
-  /** Assign to the seeding user. */
   assign?: boolean;
-  /** Index into PROJECTS. */
   project?: number;
   cycle?: "prev" | "current" | "next";
   labels?: string[];
@@ -208,8 +195,7 @@ export const demoData = orgAdminMutation({
         })
       );
     }
-
-    // Cycle windows relative to today so "current" is always live.
+    
     const cycleWindows = {
       prev: { startDate: now - 21 * DAY, endDate: now - 7 * DAY },
       current: { startDate: now - 7 * DAY, endDate: now + 7 * DAY },

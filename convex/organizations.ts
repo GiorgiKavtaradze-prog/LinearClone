@@ -15,10 +15,6 @@ const orgShape = {
   subscriptionStatus: v.optional(v.string()),
 };
 
-/**
- * The active organization (from the JWT claim), or null while webhook sync
- * is in flight. Used by the app shell to gate rendering.
- */
 export const current = query({
   args: {},
   returns: v.union(v.object(orgShape), v.null()),
@@ -55,7 +51,6 @@ export const current = query({
   },
 });
 
-/** All members of the active org with their user info (assignee pickers, @mentions). */
 export const listMembers = orgQuery({
   args: {},
   returns: v.array(

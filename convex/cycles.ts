@@ -69,7 +69,6 @@ async function countProgress(
   return progress;
 }
 
-/** Cycles for one team, newest first (lightweight — for pickers). */
 export const listByTeam = orgQuery({
   args: { teamId: v.id("teams") },
   returns: v.array(v.object(cycleShape)),
@@ -83,10 +82,6 @@ export const listByTeam = orgQuery({
   },
 });
 
-/**
- * Every cycle in the org with team info and per-status issue counts —
- * powers the cycles index page.
- */
 export const listWithProgress = orgQuery({
   args: {},
   returns: v.array(
@@ -134,10 +129,6 @@ export const get = orgQuery({
   },
 });
 
-/**
- * The team's current cycle — the active cycle (startDate ≤ now ≤ endDate)
- * with the most recent start, or null when no cycle is running.
- */
 export const currentForTeam = orgQuery({
   args: { teamId: v.id("teams") },
   returns: v.union(v.object(cycleShape), v.null()),
@@ -155,7 +146,6 @@ export const currentForTeam = orgQuery({
   },
 });
 
-/** All issues scheduled into a cycle (detail page computes progress from this). */
 export const listIssues = orgQuery({
   args: { cycleId: v.id("cycles") },
   returns: v.array(v.object(issueShape)),
@@ -169,11 +159,6 @@ export const listIssues = orgQuery({
   },
 });
 
-/**
- * Team issues NOT already in the given cycle — candidates for the
- * "add issues to cycle" picker. Assignment itself goes through
- * `issues.update` (cycleId arg).
- */
 export const candidateIssues = orgQuery({
   args: { cycleId: v.id("cycles") },
   returns: v.array(v.object(issueShape)),
@@ -192,7 +177,6 @@ export const candidateIssues = orgQuery({
   },
 });
 
-/** Create a cycle for a team. Cycles are auto-numbered per team (Cycle 1, 2, …). */
 export const create = orgMutation({
   args: {
     teamId: v.id("teams"),
@@ -207,7 +191,6 @@ export const create = orgMutation({
       throw new Error("Cycle end date must be after its start date");
     }
 
-    // Claim the next per-team cycle number.
     const latest = await ctx.db
       .query("cycles")
       .withIndex("by_team_and_number", (q) => q.eq("teamId", args.teamId))
@@ -261,7 +244,6 @@ export const update = orgMutation({
   },
 });
 
-/** Delete a cycle and unschedule its issues (issues themselves are kept). */
 export const remove = orgMutation({
   args: { cycleId: v.id("cycles") },
   returns: v.null(),

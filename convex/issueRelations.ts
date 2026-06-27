@@ -10,15 +10,6 @@ import {
   issueStatusValidator,
 } from "./schema";
 
-/**
- * Issue relations + sub-issue hierarchy.
- *
- * Relations are stored once per pair (blocked_by is normalized to the
- * inverse `blocks` row) and inverted at query time, so each side of a
- * relation sees the right direction.
- */
-
-/** Relation direction as seen from the queried issue (includes inverses). */
 const displayRelationTypeValidator = v.union(
   v.literal("blocks"),
   v.literal("blocked_by"),
@@ -29,7 +20,6 @@ const displayRelationTypeValidator = v.union(
 
 const issueSummaryValidator = v.object({
   _id: v.id("issues"),
-  /** Display identifier, e.g. "ENG-42". */
   identifier: v.string(),
   title: v.string(),
   status: issueStatusValidator,
@@ -77,8 +67,6 @@ async function issueIdentifier(
 
 type StoredRelationType = Doc<"issueRelations">["type"];
 type DisplayRelationType = StoredRelationType | "duplicated_by";
-
-/** Direction of a stored relation as seen from the *related* issue's side. */
 const INVERSE: Record<StoredRelationType, DisplayRelationType> = {
   blocks: "blocked_by",
   blocked_by: "blocks",
@@ -148,8 +136,6 @@ export const create = orgMutation({
     }
     const issue = await getOrgIssue(ctx, ctx.org._id, args.issueId);
     const related = await getOrgIssue(ctx, ctx.org._id, args.relatedIssueId);
-
-    // Normalize "A blocked_by B" to "B blocks A" so each pair is stored once.
     let fromIssue = issue;
     let toIssue = related;
     let type: StoredRelationType = args.type;
@@ -159,7 +145,6 @@ export const create = orgMutation({
       type = "blocks";
     }
 
-    // One relation per pair, in either direction.
     const existingOutgoing = await ctx.db
       .query("issueRelations")
       .withIndex("by_issue", (q) => q.eq("issueId", issue._id))
@@ -213,7 +198,6 @@ export const remove = orgMutation({
     if (!relation) {
       throw new Error("Relation not found");
     }
-    // Both ends must belong to the caller's org.
     const fromIssue = await getOrgIssue(ctx, ctx.org._id, relation.issueId);
     const toIssue = await getOrgIssue(
       ctx,
@@ -246,7 +230,6 @@ export const remove = orgMutation({
   },
 });
 
-/** Parent + sub-issues for the hierarchy panel, in one subscription. */
 export const hierarchy = orgQuery({
   args: { issueId: v.id("issues") },
   returns: v.object({
@@ -302,7 +285,6 @@ export const setParent = orgMutation({
       }
       const parent = await getOrgIssue(ctx, ctx.org._id, args.parentIssueId);
 
-      // Walk up from the new parent — hitting this issue means a cycle.
       let ancestorId: Id<"issues"> | undefined = parent.parentIssueId;
       for (let depth = 0; ancestorId && depth < 100; depth++) {
         if (ancestorId === issue._id) {
@@ -344,10 +326,6 @@ export const setParent = orgMutation({
   },
 });
 
-/**
- * Lightweight org-scoped issue finder for the relation / parent pickers.
- * Empty query returns the most recent issues.
- */
 export const searchIssues = orgQuery({
   args: {
     query: v.string(),
