@@ -271,7 +271,7 @@ async function syncSubscription(
 
   await ctx.db.patch(org._id, {
     plan,
-    subscriptionStatus: data.status,
+    subscriptionStatus: data.status ?? "inactive",
   });
 }
 
@@ -306,8 +306,14 @@ async function syncSubscriptionItem(
     eventType === "subscriptionItem.abandoned";
 
   if (activated) {
-    await ctx.db.patch(org._id, { plan: itemPlan, subscriptionStatus: "active" });
+    await ctx.db.patch(org._id, {
+      plan: itemPlan,
+      subscriptionStatus: "active",
+    });
   } else if (deactivated && org.plan === itemPlan) {
-    await ctx.db.patch(org._id, { plan: "free" });
+    await ctx.db.patch(org._id, {
+      plan: "free",
+      subscriptionStatus: data.status ?? "inactive",
+    });
   }
 }
