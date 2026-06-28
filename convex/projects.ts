@@ -7,6 +7,8 @@ import { orgMutation, orgQuery } from "./lib/customFunctions";
 import { assertCanCreateProject } from "./lib/limits";
 import { projectStatusValidator } from "./schema";
 
+type DbContext = { db: QueryCtx["db"] };
+
 export const projectShape = {
   _id: v.id("projects"),
   _creationTime: v.number(),
@@ -30,7 +32,7 @@ export const progressShape = v.object({
 });
 
 async function getOrgProject(
-  ctx: { db: QueryCtx["db"] },
+  ctx: DbContext,
   orgId: Id<"organizations">,
   projectId: Id<"projects">
 ): Promise<Doc<"projects">> {
@@ -41,16 +43,24 @@ async function getOrgProject(
   return project;
 }
 
-async function countProgress(
-  ctx: { db: QueryCtx["db"] },
+async function assertProjectLeadMembership(
+  ctx: DbContext,
   orgId: Id<"organizations">,
-  projectId: Id<"projects">
-) {
-  const issues = await ctx.db
-    .query("issues")
-    .withIndex("by_project", (q) => q.eq("projectId", projectId))
-    .collect();
-  const progress = {
+  leadId: Id<"users">
+): Promise<void> {
+  const membership = await ctx.db
+    .query("members")
+    .withIndex("by_org_and_user", (q) =>
+      q.eq("orgId", orgId).eq("userId", leadId)
+    )
+    .unique();
+  if (!membership) {
+    throw new Error("Project lead must be a member of this organization");
+  }
+}
+
+function createEmptyProgress() {
+  return {
     total: 0,
     backlog: 0,
     todo: 0,
@@ -59,6 +69,18 @@ async function countProgress(
     done: 0,
     canceled: 0,
   };
+}
+
+async function countProgress(
+  ctx: DbContext,
+  orgId: Id<"organizations">,
+  projectId: Id<"projects">
+) {
+  const issues = await ctx.db
+    .query("issues")
+    .withIndex("by_project", (q) => q.eq("projectId", projectId))
+    .collect();
+  const progress = createEmptyProgress();
   for (const issue of issues) {
     if (issue.orgId !== orgId) {
       continue;
@@ -156,15 +178,7 @@ export const create = orgMutation({
     await assertCanCreateProject(ctx, ctx.org);
 
     if (args.leadId) {
-      const membership = await ctx.db
-        .query("members")
-        .withIndex("by_org_and_user", (q) =>
-          q.eq("orgId", ctx.org._id).eq("userId", args.leadId!)
-        )
-        .unique();
-      if (!membership) {
-        throw new Error("Project lead must be a member of this organization");
-      }
+      await assertProjectLeadMembership(ctx, ctx.org._id, args.leadId);
     }
 
     return await ctx.db.insert("projects", {
@@ -209,17 +223,7 @@ export const update = orgMutation({
     }
     if (args.leadId !== undefined) {
       if (args.leadId !== null) {
-        const membership = await ctx.db
-          .query("members")
-          .withIndex("by_org_and_user", (q) =>
-            q.eq("orgId", ctx.org._id).eq("userId", args.leadId!)
-          )
-          .unique();
-        if (!membership) {
-          throw new Error(
-            "Project lead must be a member of this organization"
-          );
-        }
+        await assertProjectLeadMembership(ctx, ctx.org._id, args.leadId);
       }
       updates.leadId = args.leadId ?? undefined;
     }

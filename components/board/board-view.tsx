@@ -62,6 +62,27 @@ function findContainer(
 
 const SORT_GAP = 1000;
 
+function sortOrderForPosition({
+  above,
+  below,
+  fallback,
+}: {
+  above: Doc<"issues"> | undefined;
+  below: Doc<"issues"> | undefined;
+  fallback: number;
+}): number {
+  if (above && below) {
+    return (above.sortOrder + below.sortOrder) / 2;
+  }
+  if (above) {
+    return above.sortOrder - SORT_GAP;
+  }
+  if (below) {
+    return below.sortOrder + SORT_GAP;
+  }
+  return fallback;
+}
+
 export function BoardView({
   issues,
   teamId,
@@ -244,16 +265,11 @@ export function BoardView({
     const above = index > 0 ? issueById.get(items[index - 1]) : undefined;
     const below =
       index < items.length - 1 ? issueById.get(items[index + 1]) : undefined;
-    let sortOrder: number;
-    if (above && below) {
-      sortOrder = (above.sortOrder + below.sortOrder) / 2;
-    } else if (above) {
-      sortOrder = above.sortOrder - SORT_GAP;
-    } else if (below) {
-      sortOrder = below.sortOrder + SORT_GAP;
-    } else {
-      sortOrder = issue.sortOrder;
-    }
+    const sortOrder = sortOrderForPosition({
+      above,
+      below,
+      fallback: issue.sortOrder,
+    });
 
     const statusChanged = activeContainer !== issue.status;
     const orderChanged = sortOrder !== issue.sortOrder;

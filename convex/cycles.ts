@@ -6,6 +6,8 @@ import { logActivity } from "./lib/activity";
 import { orgMutation, orgQuery } from "./lib/customFunctions";
 import { progressShape } from "./projects";
 
+type DbContext = { db: QueryCtx["db"] };
+
 export const cycleShape = {
   _id: v.id("cycles"),
   _creationTime: v.number(),
@@ -18,7 +20,7 @@ export const cycleShape = {
 };
 
 async function getOrgCycle(
-  ctx: { db: QueryCtx["db"] },
+  ctx: DbContext,
   orgId: Id<"organizations">,
   cycleId: Id<"cycles">
 ): Promise<Doc<"cycles">> {
@@ -30,7 +32,7 @@ async function getOrgCycle(
 }
 
 async function getOrgTeam(
-  ctx: { db: QueryCtx["db"] },
+  ctx: DbContext,
   orgId: Id<"organizations">,
   teamId: Id<"teams">
 ): Promise<Doc<"teams">> {
@@ -41,16 +43,19 @@ async function getOrgTeam(
   return team;
 }
 
-async function countProgress(
-  ctx: { db: QueryCtx["db"] },
-  orgId: Id<"organizations">,
-  cycleId: Id<"cycles">
-) {
-  const issues = await ctx.db
-    .query("issues")
-    .withIndex("by_cycle", (q) => q.eq("cycleId", cycleId))
-    .collect();
-  const progress = {
+function assertValidCycleDateRange(startDate: number, endDate: number): void {
+  if (endDate <= startDate) {
+    throw new Error("Cycle end date must be after its start date");
+  }
+}
+
+function normalizeCycleName(name: string | null | undefined): string | undefined {
+  const trimmed = name?.trim();
+  return trimmed ? trimmed : undefined;
+}
+
+function createEmptyProgress() {
+  return {
     total: 0,
     backlog: 0,
     todo: 0,
@@ -59,6 +64,18 @@ async function countProgress(
     done: 0,
     canceled: 0,
   };
+}
+
+async function countProgress(
+  ctx: DbContext,
+  orgId: Id<"organizations">,
+  cycleId: Id<"cycles">
+) {
+  const issues = await ctx.db
+    .query("issues")
+    .withIndex("by_cycle", (q) => q.eq("cycleId", cycleId))
+    .collect();
+  const progress = createEmptyProgress();
   for (const issue of issues) {
     if (issue.orgId !== orgId) {
       continue;
@@ -187,9 +204,7 @@ export const create = orgMutation({
   returns: v.id("cycles"),
   handler: async (ctx, args) => {
     await getOrgTeam(ctx, ctx.org._id, args.teamId);
-    if (args.endDate <= args.startDate) {
-      throw new Error("Cycle end date must be after its start date");
-    }
+    assertValidCycleDateRange(args.startDate, args.endDate);
 
     const latest = await ctx.db
       .query("cycles")
@@ -198,12 +213,11 @@ export const create = orgMutation({
       .first();
     const number = (latest?.number ?? 0) + 1;
 
-    const name = args.name?.trim();
     return await ctx.db.insert("cycles", {
       orgId: ctx.org._id,
       teamId: args.teamId,
       number,
-      name: name ? name : undefined,
+      name: normalizeCycleName(args.name),
       startDate: args.startDate,
       endDate: args.endDate,
     });
@@ -223,14 +237,11 @@ export const update = orgMutation({
 
     const startDate = args.startDate ?? cycle.startDate;
     const endDate = args.endDate ?? cycle.endDate;
-    if (endDate <= startDate) {
-      throw new Error("Cycle end date must be after its start date");
-    }
+    assertValidCycleDateRange(startDate, endDate);
 
     const updates: Partial<Doc<"cycles">> = {};
     if (args.name !== undefined) {
-      const name = args.name?.trim();
-      updates.name = name ? name : undefined;
+      updates.name = normalizeCycleName(args.name);
     }
     if (args.startDate !== undefined) {
       updates.startDate = args.startDate;
