@@ -29,22 +29,10 @@ import {
   DisplayMode,
   IssueFilters,
   parseSavedView,
-  SavedViewPayload,
+  savedViewFingerprint,
   serializeSavedView,
   toQueryString,
 } from "./filters";
-
-function fingerprint(payload: SavedViewPayload): string {
-  return JSON.stringify({
-    teamId: payload.teamId,
-    display: payload.display,
-    statuses: [...payload.filters.statuses].sort(),
-    priorities: [...payload.filters.priorities].sort(),
-    assignees: [...payload.filters.assignees].sort(),
-    labels: [...payload.filters.labels].sort(),
-  });
-}
-
 
 export function ViewSwitcher({
   orgSlug,
@@ -68,7 +56,7 @@ export function ViewSwitcher({
   const [shared, setShared] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const currentFingerprint = fingerprint({
+  const currentFingerprint = savedViewFingerprint({
     v: 1,
     teamId,
     display,
@@ -151,7 +139,8 @@ export function ViewSwitcher({
             views.map((view) => {
               const payload = parseSavedView(view.filters);
               const isActive =
-                payload !== null && fingerprint(payload) === currentFingerprint;
+                payload !== null &&
+                savedViewFingerprint(payload) === currentFingerprint;
               return (
                 <DropdownMenuItem
                   key={view._id}

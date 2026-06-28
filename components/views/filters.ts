@@ -25,14 +25,26 @@ export const EMPTY_FILTERS: IssueFilters = {
   labels: [],
 };
 
+const QUERY_KEYS = {
+  view: "view",
+  status: "status",
+  priority: "priority",
+  assignee: "assignee",
+  label: "label",
+} as const;
+
 const STATUS_VALUES = new Set<string>(STATUSES.map((s) => s.value));
 const PRIORITY_VALUES = new Set<string>(PRIORITIES.map((p) => p.value));
+
+function uniqueValues<T>(values: T[]): T[] {
+  return [...new Set(values)];
+}
 
 function parseList(value: string | null | undefined): string[] {
   if (!value) {
     return [];
   }
-  return [...new Set(value.split(",").map((part) => part.trim()))].filter(
+  return uniqueValues(value.split(",").map((part) => part.trim())).filter(
     Boolean
   );
 }
@@ -41,20 +53,29 @@ function sanitizeStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) {
     return [];
   }
-  return [
-    ...new Set(value.filter((item): item is string => typeof item === "string")),
-  ];
+  return uniqueValues(
+    value.filter((item): item is string => typeof item === "string")
+  );
+}
+
+function filterKnownValues<T extends string>(
+  values: string[],
+  knownValues: Set<string>
+): T[] {
+  return values.filter((value): value is T => knownValues.has(value));
 }
 
 export function sanitizeFilters(input: unknown): IssueFilters {
   const raw = (input ?? {}) as Record<string, unknown>;
   return {
-    statuses: sanitizeStringArray(raw.statuses).filter((s) =>
-      STATUS_VALUES.has(s)
-    ) as IssueStatus[],
-    priorities: sanitizeStringArray(raw.priorities).filter((p) =>
-      PRIORITY_VALUES.has(p)
-    ) as IssuePriority[],
+    statuses: filterKnownValues<IssueStatus>(
+      sanitizeStringArray(raw.statuses),
+      STATUS_VALUES
+    ),
+    priorities: filterKnownValues<IssuePriority>(
+      sanitizeStringArray(raw.priorities),
+      PRIORITY_VALUES
+    ),
     assignees: sanitizeStringArray(raw.assignees),
     labels: sanitizeStringArray(raw.labels),
   };
@@ -64,15 +85,15 @@ type ParamsLike = { get(name: string): string | null };
 
 export function filtersFromSearchParams(params: ParamsLike): IssueFilters {
   return sanitizeFilters({
-    statuses: parseList(params.get("status")),
-    priorities: parseList(params.get("priority")),
-    assignees: parseList(params.get("assignee")),
-    labels: parseList(params.get("label")),
+    statuses: parseList(params.get(QUERY_KEYS.status)),
+    priorities: parseList(params.get(QUERY_KEYS.priority)),
+    assignees: parseList(params.get(QUERY_KEYS.assignee)),
+    labels: parseList(params.get(QUERY_KEYS.label)),
   });
 }
 
 export function displayFromSearchParams(params: ParamsLike): DisplayMode {
-  return params.get("view") === "list" ? "list" : "board";
+  return params.get(QUERY_KEYS.view) === "list" ? "list" : "board";
 }
 
 export function toQueryString(
@@ -81,19 +102,19 @@ export function toQueryString(
 ): string {
   const params = new URLSearchParams();
   if (display === "list") {
-    params.set("view", "list");
+    params.set(QUERY_KEYS.view, "list");
   }
   if (filters.statuses.length > 0) {
-    params.set("status", filters.statuses.join(","));
+    params.set(QUERY_KEYS.status, filters.statuses.join(","));
   }
   if (filters.priorities.length > 0) {
-    params.set("priority", filters.priorities.join(","));
+    params.set(QUERY_KEYS.priority, filters.priorities.join(","));
   }
   if (filters.assignees.length > 0) {
-    params.set("assignee", filters.assignees.join(","));
+    params.set(QUERY_KEYS.assignee, filters.assignees.join(","));
   }
   if (filters.labels.length > 0) {
-    params.set("label", filters.labels.join(","));
+    params.set(QUERY_KEYS.label, filters.labels.join(","));
   }
   return params.toString();
 }
@@ -149,6 +170,17 @@ export type SavedViewPayload = {
   display: DisplayMode;
   filters: IssueFilters;
 };
+
+export function savedViewFingerprint(payload: SavedViewPayload): string {
+  return JSON.stringify({
+    teamId: payload.teamId,
+    display: payload.display,
+    statuses: [...payload.filters.statuses].sort(),
+    priorities: [...payload.filters.priorities].sort(),
+    assignees: [...payload.filters.assignees].sort(),
+    labels: [...payload.filters.labels].sort(),
+  });
+}
 
 export function serializeSavedView(payload: {
   teamId: string;
