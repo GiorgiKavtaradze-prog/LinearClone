@@ -37,7 +37,6 @@ export function daysRemaining(cycle: CycleLike, now = Date.now()): number {
   return Math.max(0, Math.ceil((cycle.endDate - now) / DAY_MS));
 }
 
-/** Whole days until the cycle starts (0 once it has started). */
 export function daysUntilStart(cycle: CycleLike, now = Date.now()): number {
   return Math.max(0, Math.ceil((cycle.startDate - now) / DAY_MS));
 }

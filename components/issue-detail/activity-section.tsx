@@ -56,7 +56,6 @@ function Emphasis({ children }: { children: ReactNode }) {
   return <span className="font-medium text-foreground">{children}</span>;
 }
 
-/** Sentence fragment describing an activity entry (actor name is prepended). */
 function describeActivity(entry: ActivityEntry): ReactNode {
   const { type, field, oldValue, newValue } = entry;
   switch (type) {

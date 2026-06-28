@@ -11,7 +11,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CreateCycleDialog } from "@/components/cycles/create-cycle-dialog";
 import { CycleRow } from "@/components/cycles/cycle-row";
 
-/** Cycles index — Track B. Per-team time-boxed cycles, grouped by team. */
 export default function CyclesPage() {
   return (
     <Suspense
@@ -32,8 +31,7 @@ function CyclesPageInner() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  // The command palette deep-links here with ?new=true to open the dialog,
-  // so the URL param is treated as a second "open" source of truth.
+  
   const wantNew = searchParams.get("new") === "true";
   const [manualOpen, setManualOpen] = useState(false);
   const [createTeamId, setCreateTeamId] = useState<Id<"teams"> | undefined>(

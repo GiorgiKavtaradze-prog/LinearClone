@@ -13,10 +13,6 @@ import { IssueRow } from "@/components/issues/issue-row";
 import { STATUSES } from "@/components/shared/issue-meta";
 import { StatusIcon } from "@/components/shared/status-icon";
 
-/**
- * Team issues list — the foundation vertical slice. Track A adds the board
- * view, filtering, and saved views on top of this route's sibling pages.
- */
 export default function TeamIssuesPage() {
   const params = useParams<{ orgSlug: string; teamId: string }>();
   const router = useRouter();

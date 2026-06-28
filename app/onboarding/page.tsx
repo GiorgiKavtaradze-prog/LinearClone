@@ -1,10 +1,5 @@
 import { OrganizationList } from "@clerk/nextjs";
 
-/**
- * Org selection / creation. Every user needs an active organization
- * (workspace) before entering the app; Clerk redirects to /:slug after
- * selecting or creating one.
- */
 export default function OnboardingPage() {
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-6 px-6">

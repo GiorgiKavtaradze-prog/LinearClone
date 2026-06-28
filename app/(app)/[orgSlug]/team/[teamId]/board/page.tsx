@@ -38,11 +38,6 @@ function CenteredSpinner() {
   );
 }
 
-/**
- * Team board route (Track A): Kanban board + filtered list display with
- * URL-encoded filters and saved views. Lives alongside the foundation's
- * issues list at /team/[teamId].
- */
 export default function TeamBoardPage() {
   return (
     <Suspense fallback={<CenteredSpinner />}>
