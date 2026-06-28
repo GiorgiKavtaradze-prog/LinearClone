@@ -1,12 +1,6 @@
 import { Columns3, LayoutList, Search } from "lucide-react";
 import { AppCommand } from "@/components/commands/registry";
 
-/**
- * Track A command-palette commands + single-key shortcuts. Registered in
- * components/commands/registry.ts with a one-line addition.
- */
-
-/** Extract the team id when the current route is a team page (or its board). */
 function currentTeamId(): string | null {
   const match = window.location.pathname.match(/\/team\/([^/]+)/);
   return match ? match[1] : null;

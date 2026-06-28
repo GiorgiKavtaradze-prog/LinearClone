@@ -15,9 +15,7 @@ function UsageRow({
   cap,
 }: {
   label: string;
-  /** null while loading */
   count: number | null;
-  /** null means unlimited */
   cap: number | null;
 }) {
   const ratio = cap !== null && count !== null ? count / cap : 0;
@@ -60,10 +58,6 @@ function UsageRow({
   );
 }
 
-/**
- * Live usage against the free-tier caps enforced by convex/lib/limits.ts.
- * Paid plans show their seat allowance and unlimited usage.
- */
 export function UsageCard({ org }: { org: Doc<"organizations"> }) {
   const plan = planForOrg(org.plan);
   const isFree = org.plan === "free";
@@ -71,8 +65,6 @@ export function UsageCard({ org }: { org: Doc<"organizations"> }) {
   const members = useQuery(api.organizations.listMembers);
   const teams = useQuery(api.teams.list, isFree ? {} : "skip");
 
-  // Free orgs are capped at 100 issues, so summing the per-team lists is
-  // cheap and avoids needing a dedicated Convex module for this track.
   const issueQueries = useMemo(() => {
     if (!isFree || !teams) {
       return {};

@@ -60,7 +60,6 @@ function AiWorkspace() {
     if (!backfillRequested.current) {
       backfillRequested.current = true;
       ensureOrgEmbeddings({}).catch(() => {
-        // Non-critical background task.
       });
     }
   }, [ensureOrgEmbeddings]);

@@ -12,10 +12,6 @@ import { cn } from "@/lib/utils";
 export type CardLabel = { labelId: string; name: string; color: string };
 export type CardAssignee = { name: string; imageUrl?: string };
 
-/**
- * Snapshot once per page load — overdue styling doesn't need to tick live,
- * and React Compiler forbids impure calls like Date.now() during render.
- */
 const loadedAt = Date.now();
 
 function formatDueDate(dueDate: number): string {
@@ -25,7 +21,6 @@ function formatDueDate(dueDate: number): string {
   });
 }
 
-/** Pure card presentation, shared by the sortable card and the drag overlay. */
 export function BoardCardContent({
   issue,
   teamKey,
@@ -94,7 +89,6 @@ export function BoardCardContent({
   );
 }
 
-/** Draggable + clickable Kanban card. */
 export function BoardCard({
   issue,
   teamKey,

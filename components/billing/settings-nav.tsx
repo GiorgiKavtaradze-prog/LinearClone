@@ -10,7 +10,6 @@ const SETTINGS_PAGES = [
   { label: "Members", segment: "members", icon: Users },
 ] as const;
 
-/** Left-hand navigation for the workspace settings section. */
 export function SettingsNav() {
   const params = useParams<{ orgSlug: string }>();
   const pathname = usePathname();

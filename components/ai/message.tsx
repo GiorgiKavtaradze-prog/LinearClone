@@ -67,7 +67,6 @@ function AssistantText({
   );
 }
 
-/** One chat message: user prompt bubble or assistant parts (text + tools). */
 export function AiMessage({ message }: { message: UIMessage }) {
   if (message.role === "user") {
     return (

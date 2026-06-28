@@ -28,7 +28,6 @@ export function AiComposer({
     try {
       await onSend(prompt);
     } catch {
-      // Caller surfaces the error; restore the draft so nothing is lost.
       setText(prompt);
     } finally {
       setSending(false);

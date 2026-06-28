@@ -25,10 +25,6 @@ function statusBadgeVariant(
   return "secondary";
 }
 
-/**
- * Current-plan summary for the org billing settings page, with Clerk's
- * subscription drawer behind a custom button for admins.
- */
 export function CurrentPlanCard({ org }: { org: Doc<"organizations"> }) {
   const { membership } = useOrganization();
   const isAdmin = membership?.role === "org:admin";

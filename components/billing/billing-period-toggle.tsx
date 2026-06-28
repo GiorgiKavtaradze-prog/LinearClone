@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { BillingPeriod } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 
-/** Segmented monthly/annual switch used on the pricing page and settings. */
 export function BillingPeriodToggle({
   period,
   onPeriodChange,

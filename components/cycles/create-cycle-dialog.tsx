@@ -46,7 +46,6 @@ export function CreateCycleDialog({
   const [end, setEnd] = useState(() => msToInputDate(Date.now() + 13 * DAY_MS));
   const [submitting, setSubmitting] = useState(false);
 
-  // Fall back to the default/first team without needing an effect.
   const teamId = selectedTeamId ?? defaultTeamId ?? teams?.[0]?._id;
 
   const startMs = inputDateToMs(start);

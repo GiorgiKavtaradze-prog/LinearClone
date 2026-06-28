@@ -20,10 +20,6 @@ import {
 import { cn } from "@/lib/utils";
 import { BillingPeriodToggle } from "./billing-period-toggle";
 
-/**
- * Upgrade paths from the current plan, with Clerk checkout behind custom
- * buttons. Hidden entirely on Enterprise (nothing left to upgrade to).
- */
 export function UpgradeOptions({ org }: { org: Doc<"organizations"> }) {
   const [period, setPeriod] = useState<BillingPeriod>("month");
 

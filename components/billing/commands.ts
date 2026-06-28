@@ -1,7 +1,6 @@
 import { CreditCard, Sparkles, Users } from "lucide-react";
 import type { AppCommand } from "@/components/commands/registry";
 
-/** Track E command-palette entries (billing + members settings). */
 export const billingCommands: AppCommand[] = [
   {
     id: "go-billing-settings",

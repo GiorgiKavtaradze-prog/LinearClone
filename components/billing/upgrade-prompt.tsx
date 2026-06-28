@@ -22,11 +22,6 @@ import {
   PlanLimitKind,
 } from "./plan-limit-error";
 
-/**
- * Upgrade prompt shown when an org hits a free-tier limit
- * (see convex/lib/limits.ts). Org admins get an inline Clerk checkout;
- * members are pointed at their admins.
- */
 export function UpgradePromptDialog({
   open,
   onOpenChange,
@@ -101,23 +96,8 @@ export function UpgradePromptDialog({
   );
 }
 
-/**
- * Toast ids already inspected for plan-limit errors. Module-level (not
- * per-instance) so that when more than one listener is mounted — the global
- * one in WorkspaceShell plus any slot-level mounts — exactly one instance
- * claims a given limit-error toast and opens the dialog.
- */
 const seenToastIds = new Set<string | number>();
 
-/**
- * Watches the global sonner toast stream for the free-plan limit error
- * messages thrown by convex/lib/limits.ts and surfaces the upgrade dialog.
- * Mounted once for the whole workspace in WorkspaceShell, so limit errors
- * toasted from anywhere (command palette create-issue, board quick-create,
- * project dialogs, settings) trigger the upgrade prompt. Additional mounts
- * (e.g. the issue-detail slot) are harmless no-ops thanks to the shared
- * seen-toast set. Renders nothing until a limit error appears.
- */
 export function PlanLimitListener() {
   const { toasts } = useSonner();
   const pendingKindRef = useRef<PlanLimitKind | null>(null);
@@ -142,10 +122,7 @@ export function PlanLimitListener() {
     if (pendingKindRef.current === null) {
       return;
     }
-    // Defer the state update out of the effect body so the toast render
-    // commits first and we don't trigger a cascading synchronous render.
-    // The pending kind lives in a ref so a re-run reschedules rather than
-    // dropping it.
+    
     const timer = window.setTimeout(() => {
       if (pendingKindRef.current !== null) {
         setLimit(pendingKindRef.current);

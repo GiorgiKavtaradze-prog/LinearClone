@@ -60,15 +60,8 @@ function findContainer(
   return null;
 }
 
-/** Gap used when an issue is dropped at the top or bottom of a column. */
 const SORT_GAP = 1000;
 
-/**
- * Kanban board: one column per status, drag-and-drop via @dnd-kit. Drops
- * persist through `issues.update` with a fractional sortOrder between the
- * new neighbors, applied optimistically so the realtime query never
- * flickers.
- */
 export function BoardView({
   issues,
   teamId,
@@ -134,9 +127,6 @@ export function BoardView({
     columns: Columns;
   } | null>(null);
 
-  // Suppresses the click that browsers fire right after a drop, so dropping
-  // a card doesn't navigate to the issue page. Plain clicks never activate
-  // the drag sensor (4px constraint), so they are unaffected.
   const suppressClickRef = useRef(false);
 
   const columns = dragState?.columns ?? serverColumns;
@@ -184,7 +174,6 @@ export function BoardView({
         return prev;
       }
 
-      // Move the card into the hovered column at the hovered position.
       const overItems = prev.columns[overContainer];
       let newIndex = overItems.length;
       if (!overStatus) {
@@ -229,7 +218,6 @@ export function BoardView({
       return;
     }
 
-    // Same-column reorder: cross-column moves already happened in onDragOver.
     const overStatus = statusFromDroppableId(over.id);
     if (!overStatus && over.id !== activeId) {
       const overContainer = findContainer(workingColumns, over.id);
@@ -253,8 +241,6 @@ export function BoardView({
       return;
     }
 
-    // Fractional ordering between the new neighbors (columns sort
-    // descending: top of column = highest sortOrder).
     const above = index > 0 ? issueById.get(items[index - 1]) : undefined;
     const below =
       index < items.length - 1 ? issueById.get(items[index + 1]) : undefined;

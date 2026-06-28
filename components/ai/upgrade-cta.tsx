@@ -22,7 +22,6 @@ const FEATURES = [
   },
 ];
 
-/** Shown on /ai when the org's plan doesn't include the `ai_agent` feature. */
 export function AiUpgradeCta() {
   return (
     <div className="flex flex-1 items-center justify-center p-8">

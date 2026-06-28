@@ -68,7 +68,6 @@ function TriagePanelInner({ issue }: IssueDetailSlotProps) {
     setSuggestionError(null);
     setCheckingDuplicates(true);
     ensureOrgEmbeddings({}).catch(() => {
-      // Non-critical background task.
     });
     findDuplicates({ issueId: issue._id })
       .then((result) => {
@@ -123,11 +122,11 @@ function TriagePanelInner({ issue }: IssueDetailSlotProps) {
         setSuggestion((current) =>
           current
             ? {
-                ...current,
-                labels: current.labels.filter(
-                  (l) => l.labelId !== label.labelId
-                ),
-              }
+              ...current,
+              labels: current.labels.filter(
+                (l) => l.labelId !== label.labelId
+              ),
+            }
             : current
         );
       })

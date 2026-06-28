@@ -25,7 +25,6 @@ function ValueCell({ value }: { value: ComparisonValue }) {
   return <span className="text-xs text-foreground">{value}</span>;
 }
 
-/** Full plan-by-plan feature matrix rendered below the pricing cards. */
 export function FeatureComparison() {
   return (
     <div className="overflow-hidden rounded-xl border">

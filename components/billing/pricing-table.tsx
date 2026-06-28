@@ -22,11 +22,6 @@ import {
 import { cn } from "@/lib/utils";
 import { BillingPeriodToggle } from "./billing-period-toggle";
 
-/**
- * Hand-built pricing table (no <PricingTable />): three plan cards driven by
- * lib/plans.ts, with Clerk CheckoutButton / PlanDetailsButton /
- * SubscriptionDetailsButton behind custom shadcn buttons.
- */
 export function PricingTable() {
   const [period, setPeriod] = useState<BillingPeriod>("month");
 
@@ -113,12 +108,6 @@ function PlanCard({
   );
 }
 
-/**
- * Plan call-to-action. Checkout is only possible when signed in with an
- * active organization (Clerk throws otherwise), so the states are:
- * signed out → sign up; no active org → onboarding; member → ask an admin;
- * admin → CheckoutButton / SubscriptionDetailsButton.
- */
 function PlanCta({
   plan,
   period,
@@ -177,7 +166,6 @@ function PlanCta({
     );
   }
 
-  // Moving (back) to Free means cancelling the paid subscription.
   if (plan.monthlyPrice === 0) {
     return (
       <SubscriptionDetailsButton

@@ -9,7 +9,6 @@ type CycleLike = {
 
 export type CycleStatus = "current" | "upcoming" | "completed";
 
-/** "Cycle 3" or the custom name when one is set. */
 export function cycleDisplayName(cycle: CycleLike): string {
   return cycle.name ?? `Cycle ${cycle.number}`;
 }
@@ -34,7 +33,6 @@ export const CYCLE_STATUS_LABELS: Record<CycleStatus, string> = {
   completed: "Completed",
 };
 
-/** Whole days until the cycle ends (0 when it has ended). */
 export function daysRemaining(cycle: CycleLike, now = Date.now()): number {
   return Math.max(0, Math.ceil((cycle.endDate - now) / DAY_MS));
 }

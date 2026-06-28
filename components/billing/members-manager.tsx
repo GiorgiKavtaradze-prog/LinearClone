@@ -50,7 +50,6 @@ const ROLES: { value: OrganizationCustomRoleKey; label: string }[] = [
   { value: "org:admin", label: "Admin" },
 ];
 
-/** Return type of `useOrganization` as instantiated below (infinite lists). */
 type OrgListsReturn = ReturnType<
   typeof useOrganization<{
     memberships: { infinite: true };
@@ -90,10 +89,6 @@ function membershipDisplayName(
   return name || (data?.identifier ?? "Unknown user");
 }
 
-/**
- * Members management: Clerk-backed member list, role management, removal,
- * and email invitations — with seat caps from the workspace plan.
- */
 export function MembersManager() {
   const org = useQuery(api.organizations.current);
   const { isLoaded, organization, membership, memberships, invitations } =
