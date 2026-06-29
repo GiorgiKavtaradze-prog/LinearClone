@@ -1,13 +1,3 @@
-/* eslint-disable */
-/**
- * Generated `api` utility.
- *
- * THIS CODE IS AUTOMATICALLY GENERATED.
- *
- * To regenerate, run `npx convex dev`.
- * @module
- */
-
 import type * as activity from "../activity.js";
 import type * as agent_chat from "../agent/chat.js";
 import type * as agent_data from "../agent/data.js";

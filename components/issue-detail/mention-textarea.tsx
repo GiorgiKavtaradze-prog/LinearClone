@@ -74,7 +74,6 @@ export function MentionTextarea({
     onMention({ userId: member.userId, name: member.name });
     setMentionStart(null);
     setMentionQuery("");
-    // Restore the caret right after the inserted mention.
     const position = mentionStart + member.name.length + 2;
     requestAnimationFrame(() => {
       const textarea = textareaRef.current;

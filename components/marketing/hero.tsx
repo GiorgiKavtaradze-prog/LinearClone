@@ -59,7 +59,6 @@ export function Hero() {
 
       <div className="relative mx-auto mt-14 w-full max-w-6xl px-6 md:mt-20">
         <MockApp />
-        {/* Fade the bottom of the screenshot into the next section. */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 -bottom-px h-28 bg-linear-to-t from-background to-transparent"

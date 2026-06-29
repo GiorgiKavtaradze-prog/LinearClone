@@ -60,7 +60,6 @@ export const findDuplicates = action({
         ? `${issue.title}\n\n${issue.description}`
         : issue.title;
       const embedding = await embedText(text);
-      // Keep the stored embedding fresh while we have it.
       await ctx.runMutation(internal.agent.data.saveIssueEmbeddings, {
         orgId: auth.orgId,
         items: [{ issueId: args.issueId, embedding }],
