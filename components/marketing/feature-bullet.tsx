@@ -12,7 +12,7 @@ export function FeatureBullet({
   return (
     <div className="flex gap-3.5">
       <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md border bg-muted/50">
-        <Icon className="size-3.5 text-foreground/80" />
+        <Icon aria-hidden="true" className="size-3.5 text-foreground/80" />
       </span>
       <div>
         <h3 className="text-sm font-medium">{title}</h3>

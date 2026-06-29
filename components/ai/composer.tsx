@@ -2,8 +2,10 @@
 
 import { ArrowUp } from "lucide-react";
 import { FormEvent, KeyboardEvent, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { convexErrorMessage } from "./convex-error";
 
 export function AiComposer({
   disabled,
@@ -27,8 +29,11 @@ export function AiComposer({
     setText("");
     try {
       await onSend(prompt);
-    } catch {
+    } catch (error) {
       setText(prompt);
+      toast.error(
+        convexErrorMessage(error, "Failed to send message. Please try again.")
+      );
     } finally {
       setSending(false);
       textareaRef.current?.focus();

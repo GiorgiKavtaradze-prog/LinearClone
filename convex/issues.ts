@@ -1,3 +1,7 @@
+import {
+  paginationOptsValidator,
+  paginationResultValidator,
+} from "convex/server";
 import { v } from "convex/values";
 import { Doc, Id } from "./_generated/dataModel";
 import { QueryCtx } from "./_generated/server";
@@ -40,18 +44,25 @@ export async function getOrgIssue(
 }
 
 export const listByTeam = orgQuery({
-  args: { teamId: v.id("teams") },
-  returns: v.array(v.object(issueShape)),
+  args: { teamId: v.id("teams"), paginationOpts: paginationOptsValidator },
+  returns: paginationResultValidator(v.object(issueShape)),
   handler: async (ctx, args) => {
     const team = await ctx.db.get(args.teamId);
     if (!team || team.orgId !== ctx.org._id) {
       throw new Error("Team not found");
     }
-    return await ctx.db
+    const result = await ctx.db
       .query("issues")
       .withIndex("by_team", (q) => q.eq("teamId", args.teamId))
       .order("desc")
-      .take(500);
+      .paginate(args.paginationOpts);
+
+    // Schema is frozen, so we cannot add a by_team_and_sort index here.
+    // Keep board/list ordering stable within the loaded page in memory.
+    return {
+      ...result,
+      page: [...result.page].sort((a, b) => b.sortOrder - a.sortOrder),
+    };
   },
 });
 
@@ -75,12 +86,16 @@ export const getByNumber = orgQuery({
     if (!team || team.orgId !== ctx.org._id) {
       return null;
     }
-    return await ctx.db
+    const issue = await ctx.db
       .query("issues")
       .withIndex("by_team_and_number", (q) =>
         q.eq("teamId", args.teamId).eq("number", args.number)
       )
       .unique();
+    if (issue && issue.orgId !== ctx.org._id) {
+      throw new Error("Issue not found");
+    }
+    return issue;
   },
 });
 

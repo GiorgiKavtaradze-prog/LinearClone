@@ -165,6 +165,7 @@ export function ActivitySection({ issue }: IssueDetailSlotProps) {
     "admin";
 
   const items = useMemo<FeedItem[]>(() => {
+    // compiler will optimize
     const feed: FeedItem[] = (comments ?? []).map((comment) => ({
       kind: "comment",
       time: comment._creationTime,

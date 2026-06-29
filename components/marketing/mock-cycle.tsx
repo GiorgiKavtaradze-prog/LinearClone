@@ -11,7 +11,10 @@ export function MockCycle({ className }: { className?: string }) {
   return (
     <div className={cn("rounded-xl border bg-card p-4 shadow-sm", className)}>
       <div className="flex items-center gap-2">
-        <RefreshCcw className="size-3.5 text-muted-foreground" />
+        <RefreshCcw
+          aria-hidden="true"
+          className="size-3.5 text-muted-foreground"
+        />
         <span className="text-sm font-medium">Cycle 14</span>
         <span className="text-xs text-muted-foreground">Jun 2 – Jun 16</span>
         <span className="ml-auto font-mono text-xs text-emerald-500">

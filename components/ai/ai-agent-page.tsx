@@ -71,19 +71,12 @@ function AiWorkspace() {
     quota.remaining <= 0;
 
   const send = async (prompt: string) => {
-    try {
-      let threadId = selectedThreadId;
-      if (!threadId) {
-        threadId = await createThread({});
-        setSelectedThreadId(threadId);
-      }
-      await sendMessage({ threadId, prompt });
-    } catch (error) {
-      toast.error(
-        convexErrorMessage(error, "Failed to send message. Please try again.")
-      );
-      throw error;
+    let threadId = selectedThreadId;
+    if (!threadId) {
+      threadId = await createThread({});
+      setSelectedThreadId(threadId);
     }
+    await sendMessage({ threadId, prompt });
   };
 
   const removeThread = (threadId: string) => {
@@ -162,7 +155,16 @@ function EmptyState({
               size="sm"
               disabled={disabled}
               className="justify-start font-normal text-muted-foreground"
-              onClick={() => void onSuggestion(suggestion)}
+              onClick={() => {
+                onSuggestion(suggestion).catch((error: unknown) => {
+                  toast.error(
+                    convexErrorMessage(
+                      error,
+                      "Failed to send message. Please try again."
+                    )
+                  );
+                });
+              }}
             >
               {suggestion}
             </Button>
