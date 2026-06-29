@@ -13,7 +13,6 @@ export type DisplayMode = "board" | "list";
 export type IssueFilters = {
   statuses: IssueStatus[];
   priorities: IssuePriority[];
-  /** User ids, or the {@link UNASSIGNED_FILTER} sentinel */
   assignees: string[];
   labels: string[];
 };

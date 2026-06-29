@@ -151,7 +151,6 @@ export default defineSchema({
     issueId: v.id("issues"),
     authorId: v.id("users"),
     body: v.string(),
-    /** User ids @mentioned in the body */
     mentions: v.optional(v.array(v.id("users"))),
   }).index("by_issue", ["issueId"]),
 

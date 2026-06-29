@@ -6,10 +6,6 @@ import { UserAvatar } from "@/components/shared/user-avatar";
 import { MOCK_LABELS, MOCK_PEOPLE } from "@/components/marketing/mock-data";
 import { MockFrame, MockWindowBar } from "@/components/marketing/mock-window";
 
-/**
- * Issue detail mock for the "Issues" feature section: title, description,
- * sub-issues, a comment with an @mention, and the properties rail.
- */
 export function MockIssueDetail({ className }: { className?: string }) {
   return (
     <MockFrame className={className}>
