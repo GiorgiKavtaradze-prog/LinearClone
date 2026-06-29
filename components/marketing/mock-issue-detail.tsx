@@ -12,7 +12,7 @@ export function MockIssueDetail({ className }: { className?: string }) {
       <MockWindowBar>
         <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
           Engineering
-          <ChevronRight className="size-3" />
+          <ChevronRight aria-hidden="true" className="size-3" />
           <span className="font-mono">ENG-142</span>
         </span>
       </MockWindowBar>
@@ -80,8 +80,14 @@ export function MockIssueDetail({ className }: { className?: string }) {
             />
           </PropertyRow>
           <PropertyRow label="Links">
-            <GitBranch className="size-3.5 text-muted-foreground" />
-            <Paperclip className="size-3.5 text-muted-foreground" />
+            <GitBranch
+              aria-hidden="true"
+              className="size-3.5 text-muted-foreground"
+            />
+            <Paperclip
+              aria-hidden="true"
+              className="size-3.5 text-muted-foreground"
+            />
             <span className="text-muted-foreground">+2</span>
           </PropertyRow>
         </aside>

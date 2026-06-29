@@ -15,7 +15,10 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { useMutation } from "convex/react";
+import {
+  optimisticallyUpdateValueInPaginatedQuery,
+  useMutation,
+} from "convex/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -106,14 +109,11 @@ export function BoardView({
 
   const updateIssue = useMutation(api.issues.update).withOptimisticUpdate(
     (localStore, args) => {
-      const current = localStore.getQuery(api.issues.listByTeam, { teamId });
-      if (!current) {
-        return;
-      }
-      localStore.setQuery(
+      optimisticallyUpdateValueInPaginatedQuery(
+        localStore,
         api.issues.listByTeam,
         { teamId },
-        current.map((issue) =>
+        (issue) =>
           issue._id === args.issueId
             ? {
                 ...issue,
@@ -123,17 +123,18 @@ export function BoardView({
                   : {}),
               }
             : issue
-        )
       );
     }
   );
 
   const issueById = useMemo(
+    // compiler will optimize
     () => new Map(issues.map((issue) => [issue._id, issue])),
     [issues]
   );
 
   const serverColumns = useMemo(() => {
+    // compiler will optimize
     const columns = emptyColumns();
     for (const issue of [...issues].sort(
       (a, b) => b.sortOrder - a.sortOrder
@@ -279,8 +280,8 @@ export function BoardView({
 
     updateIssue({
       issueId: activeId,
-      ...(statusChanged ? { status: activeContainer } : {}),
-      ...(orderChanged ? { sortOrder } : {}),
+      status: activeContainer,
+      sortOrder,
     }).catch((error: unknown) => {
       toast.error(
         error instanceof Error ? error.message : "Failed to move issue"

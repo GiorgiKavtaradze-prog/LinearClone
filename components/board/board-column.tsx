@@ -43,7 +43,11 @@ export function BoardColumn({
   const [composerOpen, setComposerOpen] = useState(false);
 
   return (
-    <div className="flex max-h-full w-72 shrink-0 flex-col rounded-lg bg-muted/40">
+    <div
+      role="region"
+      aria-label={`${label} column, ${issues.length} issues`}
+      className="flex max-h-full w-72 shrink-0 flex-col rounded-lg bg-muted/40"
+    >
       <div className="flex h-10 shrink-0 items-center gap-2 px-3">
         <StatusIcon status={status} />
         <span className="text-sm font-medium">{label}</span>
@@ -53,7 +57,7 @@ export function BoardColumn({
           size="icon"
           className="ml-auto size-6 text-muted-foreground"
           onClick={() => setComposerOpen(true)}
-          aria-label={`New ${label} issue`}
+          aria-label={`Add issue to ${label}`}
         >
           <Plus className="size-3.5" />
         </Button>
@@ -93,6 +97,7 @@ export function BoardColumn({
           {issues.length === 0 && !composerOpen ? (
             <button
               onClick={() => setComposerOpen(true)}
+              aria-label={`Add issue to ${label}`}
               className="flex h-14 items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground/70 transition-colors hover:border-muted-foreground/40 hover:text-muted-foreground"
             >
               Drop issues here or click to add

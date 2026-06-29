@@ -22,11 +22,14 @@ export function Hero() {
           className="group flex items-center gap-2 rounded-full border bg-background/60 py-1 pr-3 pl-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:border-ring/60 hover:text-foreground"
         >
           <span className="flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground">
-            <Sparkles className="size-2.5" />
+            <Sparkles aria-hidden="true" className="size-2.5" />
             New
           </span>
           The AI agent joins your team on Pro
-          <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
+          <ArrowRight
+            aria-hidden="true"
+            className="size-3 transition-transform group-hover:translate-x-0.5"
+          />
         </Link>
 
         <h1 className="mt-8 max-w-3xl text-5xl font-semibold tracking-tighter text-balance md:text-7xl">
@@ -42,7 +45,7 @@ export function Hero() {
           <Button size="lg" className="h-10 px-5" asChild>
             <Link href="/sign-up">
               Start building — free
-              <ArrowRight className="size-4" />
+              <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </Button>
           <Button size="lg" variant="outline" className="h-10 px-5" asChild>

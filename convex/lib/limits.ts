@@ -22,7 +22,7 @@ export async function assertCanCreateIssue(
   const issues = await ctx.db
     .query("issues")
     .withIndex("by_org", (q) => q.eq("orgId", org._id))
-    .collect();
+    .take(FREE_PLAN_LIMITS.issues + 1);
   if (issues.length >= FREE_PLAN_LIMITS.issues) {
     throw new Error(
       `Free plan is limited to ${FREE_PLAN_LIMITS.issues} issues. Upgrade to Pro for unlimited issues.`

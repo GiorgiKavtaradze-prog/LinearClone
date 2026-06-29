@@ -9,7 +9,7 @@ export function MockAiChat({ className }: { className?: string }) {
     <MockFrame className={className}>
       <MockWindowBar>
         <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-          <Sparkles className="size-3" />
+          <Sparkles aria-hidden="true" className="size-3" />
           Agent
         </span>
         <span className="ml-auto rounded border px-1.5 py-0.5 text-[10px] text-muted-foreground">
@@ -29,7 +29,10 @@ export function MockAiChat({ className }: { className?: string }) {
 
         <div className="flex items-start gap-2.5">
           <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border bg-muted">
-            <Sparkles className="size-3 text-muted-foreground" />
+            <Sparkles
+              aria-hidden="true"
+              className="size-3 text-muted-foreground"
+            />
           </span>
           <div className="min-w-0 flex-1 space-y-2.5">
             <div className="flex flex-wrap gap-1.5">
@@ -71,7 +74,7 @@ export function MockAiChat({ className }: { className?: string }) {
         <div className="flex h-9 items-center gap-2 rounded-lg border bg-background px-3 text-xs text-muted-foreground">
           Draft the standup for #engineering…
           <span className="ml-auto flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px]">
-            <CornerDownLeft className="size-3" /> Send
+            <CornerDownLeft aria-hidden="true" className="size-3" /> Send
           </span>
         </div>
       </div>
@@ -82,7 +85,7 @@ export function MockAiChat({ className }: { className?: string }) {
 function ToolChip({ name }: { name: string }) {
   return (
     <span className="inline-flex items-center gap-1 rounded-md border bg-muted/50 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
-      <Check className="size-2.5 text-emerald-500" />
+      <Check aria-hidden="true" className="size-2.5 text-emerald-500" />
       {name}
     </span>
   );

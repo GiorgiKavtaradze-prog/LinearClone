@@ -27,5 +27,10 @@ export function PriorityIcon({
   className?: string;
 }) {
   const { icon: Icon, className: colorClass } = config[priority];
-  return <Icon className={cn("size-4 shrink-0", colorClass, className)} />;
+  return (
+    <Icon
+      aria-hidden="true"
+      className={cn("size-4 shrink-0", colorClass, className)}
+    />
+  );
 }

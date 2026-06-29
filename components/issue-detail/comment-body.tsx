@@ -14,6 +14,7 @@ export function CommentBody({
   mentionedUsers: MentionedUser[];
 }) {
   const segments = useMemo(() => {
+    // compiler will optimize
     if (mentionedUsers.length === 0) {
       return [{ text: body, mention: false }];
     }

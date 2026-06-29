@@ -29,5 +29,10 @@ export function StatusIcon({
   className?: string;
 }) {
   const { icon: Icon, className: colorClass } = config[status];
-  return <Icon className={cn("size-4 shrink-0", colorClass, className)} />;
+  return (
+    <Icon
+      aria-hidden="true"
+      className={cn("size-4 shrink-0", colorClass, className)}
+    />
+  );
 }

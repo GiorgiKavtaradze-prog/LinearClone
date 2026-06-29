@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { usePaginatedQuery, useQuery } from "convex/react";
 import { Columns3, List, Loader2, Plus } from "lucide-react";
 import Link from "next/link";
 import {
@@ -30,6 +30,8 @@ import {
 } from "@/components/views/filters";
 import { ViewSwitcher } from "@/components/views/view-switcher";
 
+const ISSUE_PAGE_SIZE = 100;
+
 function CenteredSpinner() {
   return (
     <div className="flex flex-1 items-center justify-center">
@@ -55,7 +57,15 @@ function TeamBoardContent() {
   const { openCreateIssue } = useCommands();
 
   const team = useQuery(api.teams.get, { teamId });
-  const issues = useQuery(api.issues.listByTeam, { teamId });
+  const {
+    results: issues,
+    status: issuesStatus,
+    loadMore,
+  } = usePaginatedQuery(
+    api.issues.listByTeam,
+    { teamId },
+    { initialNumItems: ISSUE_PAGE_SIZE }
+  );
   const labelRows = useQuery(api.views.teamIssueLabels, { teamId });
   const members = useQuery(api.organizations.listMembers);
   const orgLabels = useQuery(api.labels.list);
@@ -107,7 +117,7 @@ function TeamBoardContent() {
     [issues, filters, labelIdsByIssue]
   );
 
-  if (team === undefined || issues === undefined) {
+  if (team === undefined || issuesStatus === "LoadingFirstPage") {
     return <CenteredSpinner />;
   }
 
@@ -175,20 +185,46 @@ function TeamBoardContent() {
       </div>
 
       {display === "board" ? (
-        <BoardView
-          issues={filteredIssues}
-          teamId={teamId}
-          teamKey={team.key}
-          orgSlug={params.orgSlug}
-          labelsByIssue={labelsByIssue}
-          assigneesById={assigneesById}
-        />
+        <>
+          <BoardView
+            issues={filteredIssues}
+            teamId={teamId}
+            teamKey={team.key}
+            orgSlug={params.orgSlug}
+            labelsByIssue={labelsByIssue}
+            assigneesById={assigneesById}
+          />
+          {issuesStatus === "CanLoadMore" ? (
+            <div className="flex shrink-0 justify-center border-t p-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => loadMore(ISSUE_PAGE_SIZE)}
+              >
+                Load more issues
+              </Button>
+            </div>
+          ) : null}
+        </>
       ) : (
-        <FilteredIssueList
-          issues={filteredIssues}
-          teamKey={team.key}
-          hasActiveFilters={countActiveFilters(filters) > 0}
-        />
+        <>
+          <FilteredIssueList
+            issues={filteredIssues}
+            teamKey={team.key}
+            hasActiveFilters={countActiveFilters(filters) > 0}
+          />
+          {issuesStatus === "CanLoadMore" ? (
+            <div className="flex shrink-0 justify-center border-t p-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => loadMore(ISSUE_PAGE_SIZE)}
+              >
+                Load more issues
+              </Button>
+            </div>
+          ) : null}
+        </>
       )}
     </>
   );

@@ -60,7 +60,7 @@ export function Testimonials() {
                 </p>
                 <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   {testimonial.role} ·
-                  <testimonial.icon className="size-3" />
+                  <testimonial.icon aria-hidden="true" className="size-3" />
                   {testimonial.company}
                 </p>
               </div>

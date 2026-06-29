@@ -25,7 +25,7 @@ export function Cta() {
           <Button size="lg" className="h-10 px-5" asChild>
             <Link href="/sign-up">
               Get started for free
-              <ArrowRight className="size-4" />
+              <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </Button>
           <Button size="lg" variant="ghost" className="h-10 px-5" asChild>

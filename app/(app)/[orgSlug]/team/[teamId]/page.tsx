@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { usePaginatedQuery, useQuery } from "convex/react";
 import { Columns3, List, Loader2, Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/convex/_generated/api";
@@ -13,15 +13,25 @@ import { IssueRow } from "@/components/issues/issue-row";
 import { STATUSES } from "@/components/shared/issue-meta";
 import { StatusIcon } from "@/components/shared/status-icon";
 
+const ISSUE_PAGE_SIZE = 100;
+
 export default function TeamIssuesPage() {
   const params = useParams<{ orgSlug: string; teamId: string }>();
   const router = useRouter();
   const teamId = params.teamId as Id<"teams">;
   const team = useQuery(api.teams.get, { teamId });
-  const issues = useQuery(api.issues.listByTeam, { teamId });
+  const {
+    results: issues,
+    status: issuesStatus,
+    loadMore,
+  } = usePaginatedQuery(
+    api.issues.listByTeam,
+    { teamId },
+    { initialNumItems: ISSUE_PAGE_SIZE }
+  );
   const { openCreateIssue } = useCommands();
 
-  if (team === undefined || issues === undefined) {
+  if (team === undefined || issuesStatus === "LoadingFirstPage") {
     return (
       <div className="flex flex-1 items-center justify-center">
         <Loader2 className="size-4 animate-spin text-muted-foreground" />
@@ -85,20 +95,33 @@ export default function TeamIssuesPage() {
             </p>
           </div>
         ) : (
-          grouped.map(({ status, issues: groupIssues }) => (
-            <section key={status.value}>
-              <div className="flex h-9 items-center gap-2 bg-muted/50 px-4 text-sm">
-                <StatusIcon status={status.value} />
-                <span className="font-medium">{status.label}</span>
-                <span className="text-xs text-muted-foreground">
-                  {groupIssues.length}
-                </span>
+          <>
+            {grouped.map(({ status, issues: groupIssues }) => (
+              <section key={status.value}>
+                <div className="flex h-9 items-center gap-2 bg-muted/50 px-4 text-sm">
+                  <StatusIcon status={status.value} />
+                  <span className="font-medium">{status.label}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {groupIssues.length}
+                  </span>
+                </div>
+                {groupIssues.map((issue) => (
+                  <IssueRow key={issue._id} issue={issue} teamKey={team.key} />
+                ))}
+              </section>
+            ))}
+            {issuesStatus === "CanLoadMore" ? (
+              <div className="flex justify-center p-3">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => loadMore(ISSUE_PAGE_SIZE)}
+                >
+                  Load more issues
+                </Button>
               </div>
-              {groupIssues.map((issue) => (
-                <IssueRow key={issue._id} issue={issue} teamKey={team.key} />
-              ))}
-            </section>
-          ))
+            ) : null}
+          </>
         )}
       </ScrollArea>
     </>

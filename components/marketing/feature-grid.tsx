@@ -64,7 +64,7 @@ export function FeatureGrid() {
             className="group bg-background p-6 transition-colors hover:bg-muted/40"
           >
             <span className="flex size-8 items-center justify-center rounded-md border bg-muted/50 transition-colors group-hover:border-ring/50">
-              <Icon className="size-4 text-foreground/80" />
+              <Icon aria-hidden="true" className="size-4 text-foreground/80" />
             </span>
             <h3 className="mt-4 text-sm font-medium">{title}</h3>
             <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">

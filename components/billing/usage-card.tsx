@@ -1,6 +1,7 @@
 "use client";
 
 import { useQueries, useQuery } from "convex/react";
+import { FunctionReturnType } from "convex/server";
 import { TriangleAlert } from "lucide-react";
 import { useMemo } from "react";
 import { api } from "@/convex/_generated/api";
@@ -8,6 +9,8 @@ import { Doc } from "@/convex/_generated/dataModel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FREE_PLAN_DISPLAY_LIMITS, planForOrg } from "@/lib/plans";
 import { cn } from "@/lib/utils";
+
+type IssuesPage = FunctionReturnType<typeof api.issues.listByTeam>;
 
 function UsageRow({
   label,
@@ -72,7 +75,16 @@ export function UsageCard({ org }: { org: Doc<"organizations"> }) {
     return Object.fromEntries(
       teams.map((team) => [
         team._id,
-        { query: api.issues.listByTeam, args: { teamId: team._id } },
+        {
+          query: api.issues.listByTeam,
+          args: {
+            teamId: team._id,
+            paginationOpts: {
+              cursor: null,
+              numItems: FREE_PLAN_DISPLAY_LIMITS.issues + 1,
+            },
+          },
+        },
       ])
     );
   }, [isFree, teams]);
@@ -83,9 +95,13 @@ export function UsageCard({ org }: { org: Doc<"organizations"> }) {
     issueCount = null;
   } else {
     for (const team of teams) {
-      const result: unknown = issueResults[team._id];
-      if (Array.isArray(result)) {
-        issueCount += result.length;
+      const result = issueResults[team._id] as IssuesPage | undefined;
+      if (result) {
+        issueCount += result.page.length;
+        if (!result.isDone) {
+          issueCount = FREE_PLAN_DISPLAY_LIMITS.issues;
+          break;
+        }
       } else {
         issueCount = null;
         break;

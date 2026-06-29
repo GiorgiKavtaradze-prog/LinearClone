@@ -33,13 +33,13 @@ export function MockApp({ className }: { className?: string }) {
             <span className="text-muted-foreground">Active issues</span>
             <div className="ml-auto flex items-center gap-1.5 text-muted-foreground">
               <span className="hidden items-center gap-1 rounded-md border px-1.5 py-0.5 text-xs sm:flex">
-                <ListFilter className="size-3" /> Filter
+                <ListFilter aria-hidden="true" className="size-3" /> Filter
               </span>
               <span className="hidden items-center gap-1 rounded-md border px-1.5 py-0.5 text-xs sm:flex">
-                <LayoutGrid className="size-3" /> Board
+                <LayoutGrid aria-hidden="true" className="size-3" /> Board
               </span>
               <span className="flex items-center gap-1 rounded-md bg-primary px-1.5 py-0.5 text-xs text-primary-foreground">
-                <Plus className="size-3" /> New issue
+                <Plus aria-hidden="true" className="size-3" /> New issue
                 <Kbd className="ml-0.5 h-4 border-0 bg-primary-foreground/15 text-primary-foreground">
                   C
                 </Kbd>
@@ -76,28 +76,58 @@ function MockSidebar() {
           A
         </span>
         <span className="text-xs font-semibold">Acme Inc</span>
-        <ChevronDown className="size-3 text-muted-foreground" />
+        <ChevronDown
+          aria-hidden="true"
+          className="size-3 text-muted-foreground"
+        />
       </div>
       <nav className="flex flex-col gap-0.5 p-2 text-xs text-muted-foreground">
-        <SidebarItem icon={<Inbox className="size-3.5" />} label="Inbox" badge="3" />
-        <SidebarItem icon={<UserRound className="size-3.5" />} label="My issues" />
-        <SidebarItem icon={<Search className="size-3.5" />} label="Search" kbd="/" />
+        <SidebarItem
+          icon={<Inbox aria-hidden="true" className="size-3.5" />}
+          label="Inbox"
+          badge="3"
+        />
+        <SidebarItem
+          icon={<UserRound aria-hidden="true" className="size-3.5" />}
+          label="My issues"
+        />
+        <SidebarItem
+          icon={<Search aria-hidden="true" className="size-3.5" />}
+          label="Search"
+          kbd="/"
+        />
         <p className="mt-3 mb-1 px-2 text-[10px] font-medium tracking-wider uppercase">
           Workspace
         </p>
-        <SidebarItem icon={<Target className="size-3.5" />} label="Projects" />
-        <SidebarItem icon={<RefreshCcw className="size-3.5" />} label="Cycles" />
-        <SidebarItem icon={<Bot className="size-3.5" />} label="AI Agent" badge="Pro" />
+        <SidebarItem
+          icon={<Target aria-hidden="true" className="size-3.5" />}
+          label="Projects"
+        />
+        <SidebarItem
+          icon={<RefreshCcw aria-hidden="true" className="size-3.5" />}
+          label="Cycles"
+        />
+        <SidebarItem
+          icon={<Bot aria-hidden="true" className="size-3.5" />}
+          label="AI Agent"
+          badge="Pro"
+        />
         <p className="mt-3 mb-1 px-2 text-[10px] font-medium tracking-wider uppercase">
           Teams
         </p>
         <SidebarItem
-          icon={<Box className="size-3.5" />}
+          icon={<Box aria-hidden="true" className="size-3.5" />}
           label="Engineering"
           active
         />
-        <SidebarItem icon={<Box className="size-3.5" />} label="Design" />
-        <SidebarItem icon={<Box className="size-3.5" />} label="Growth" />
+        <SidebarItem
+          icon={<Box aria-hidden="true" className="size-3.5" />}
+          label="Design"
+        />
+        <SidebarItem
+          icon={<Box aria-hidden="true" className="size-3.5" />}
+          label="Growth"
+        />
       </nav>
     </aside>
   );
