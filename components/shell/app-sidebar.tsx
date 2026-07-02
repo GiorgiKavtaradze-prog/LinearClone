@@ -110,7 +110,6 @@ export function AppSidebar() {
           <NavLink href={base} exact icon={<Box className="size-4" />}>
             Workspace
           </NavLink>
-          {/* Track B adds /projects + /cycles nav; Track D adds /ai nav */}
           <NavLink href={`${base}/projects`} icon={<Box className="size-4" />}>
             Projects
           </NavLink>

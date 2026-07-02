@@ -128,13 +128,11 @@ export function BoardView({
   );
 
   const issueById = useMemo(
-    // compiler will optimize
     () => new Map(issues.map((issue) => [issue._id, issue])),
     [issues]
   );
 
   const serverColumns = useMemo(() => {
-    // compiler will optimize
     const columns = emptyColumns();
     for (const issue of [...issues].sort(
       (a, b) => b.sortOrder - a.sortOrder
