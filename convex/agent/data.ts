@@ -506,12 +506,13 @@ export const issuesMissingEmbeddings = internalQuery({
     v.object({ issueId: v.id("issues"), text: v.string() })
   ),
   handler: async (ctx, args) => {
-    const missing = await ctx.db
+    const issues = await ctx.db
       .query("issues")
       .withIndex("by_org", (q) => q.eq("orgId", args.orgId))
-      // eslint-disable-next-line @convex-dev/no-filter-in-query
-      .filter((q) => q.eq(q.field("embedding"), undefined))
-      .take(args.limit);
+      .collect();
+    const missing = issues
+      .filter((issue) => issue.embedding === undefined)
+      .slice(0, args.limit);
     return missing.map((issue) => ({
       issueId: issue._id,
       text: issueText(issue),

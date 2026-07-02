@@ -57,8 +57,6 @@ export const listByTeam = orgQuery({
       .order("desc")
       .paginate(args.paginationOpts);
 
-    // Schema is frozen, so we cannot add a by_team_and_sort index here.
-    // Keep board/list ordering stable within the loaded page in memory.
     return {
       ...result,
       page: [...result.page].sort((a, b) => b.sortOrder - a.sortOrder),
